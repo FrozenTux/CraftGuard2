@@ -34,12 +34,15 @@ public class CraftGuardPlugin extends JavaPlugin {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
+	
 	
 	public void onDisable(){
 		
+	}
+	
+	public FrozenLogger getFrozenLogger(){
+		return frozenLogger;
 	}
 	
 }
