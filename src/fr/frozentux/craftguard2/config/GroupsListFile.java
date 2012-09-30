@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
  * @author FrozenTux
  *
  */
-public class GroupsList {
+public class GroupsListFile {
 	
 	private Plugin plugin;
 	
@@ -21,7 +21,7 @@ public class GroupsList {
 	private File configurationFile;
 	private FileConfiguration configuration;
 	
-	public GroupsList(Plugin plugin, FileConfiguration fileConfiguration, File file){
+	public GroupsListFile(Plugin plugin, FileConfiguration fileConfiguration, File file){
 		this.plugin = plugin;
 		this.configurationFile = file;
 		this.configuration = fileConfiguration;
