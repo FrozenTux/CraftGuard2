@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
  * @author FrozenTux
  *
  */
-public class CraftGuardGroupsList {
+public class GroupsList {
 	
 	private Plugin plugin;
 	
@@ -21,7 +21,7 @@ public class CraftGuardGroupsList {
 	private File configurationFile;
 	private FileConfiguration configuration;
 	
-	public CraftGuardGroupsList(Plugin plugin, FileConfiguration fileConfiguration, File file){
+	public GroupsList(Plugin plugin, FileConfiguration fileConfiguration, File file){
 		this.plugin = plugin;
 		this.configurationFile = file;
 		this.configuration = fileConfiguration;

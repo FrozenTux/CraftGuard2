@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  * @author FrozenTux
  *
  */
-public class CraftGuardPlayerListener implements Listener {
+public class PlayerListener implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e){
