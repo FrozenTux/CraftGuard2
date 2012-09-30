@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.org.apache.xml.internal.serialize.XHTMLSerializer;
+
 /**
  * Data structure that reprensents a CraftGuard list/group
  * @author FrozenTux
@@ -11,7 +13,9 @@ import java.util.Iterator;
  */
 public class List {
 	
-	private String name, permission, parent;
+	private String name, permission;
+	private List parent;
+	private ArrayList<List> childs;
 	
 	private HashMap<Integer, Id> ids;
 	
@@ -22,11 +26,13 @@ public class List {
 	 * @param ids			The Hashmap containing the ids and data values
 	 * @param parent		The parent group (may be null if no parent)
 	 */
-	public List(String name, String permission,  HashMap<Integer, Id> ids, String parent){
+	public List(String name, String permission,  HashMap<Integer, Id> ids, List parent){
 		this.name = name;
 		this.permission = permission;
 		this.parent = parent;
 		this.ids = ids;
+		childs = new ArrayList<List>();
+		if(parent != null)parent.registerChild(this);
 	}
 	
 	/**
@@ -42,6 +48,7 @@ public class List {
 				ids.get(id.getId()).addMetadata(i.next());
 			}
 		}else ids.put(id.getId(), id);
+		notifyChilds();
 	}
 	
 	/**
@@ -50,6 +57,7 @@ public class List {
 	 */
 	public void removeId(int id){
 		ids.remove(id);
+		notifyChilds();
 	}
 	
 	/**
@@ -77,4 +85,27 @@ public class List {
 	public HashMap<Integer, Id> getIds(){
 		return (HashMap<Integer, Id>) ids.clone();
 	}
+	
+	/**
+	 * Registers a child of this class to be notified when the list updates
+	 * @param child	Child to register
+	 */
+	public void registerChild(List child){
+		childs.add(child);
+	}
+	
+	/**
+	 * This method is called by a parent class when it has been updated
+	 */
+	public void onParentUpdate(){
+		//TODO
+	}
+	
+	private void notifyChilds(){
+		Iterator<List> it = childs.iterator();
+		while(it.hasNext()){
+			it.next().onParentUpdate();
+		}
+	}
+	
 }
