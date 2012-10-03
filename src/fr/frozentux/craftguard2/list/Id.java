@@ -13,6 +13,12 @@ public class Id {
 	private boolean overrideAllMetadata;
 	private ArrayList<Integer> metadata;
 	
+	public Id(int id){
+		this.id = id;
+		this.metadata = new ArrayList<Integer>();
+		this.overrideAllMetadata = true;
+	}
+	
 	/**
 	 * Data structure reprensenting an ID with it's metadata
 	 * @param id		
@@ -29,6 +35,7 @@ public class Id {
 	 * @param metadata	The metadata to add
 	 */
 	public void addMetadata(int metadata){
+		this.overrideAllMetadata = false;
 		if(!this.metadata.contains(metadata))this.metadata.add(metadata);
 	}
 	
