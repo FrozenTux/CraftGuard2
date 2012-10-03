@@ -1,10 +1,8 @@
-package fr.frozentux.craftguard2.config;
+package fr.frozentux.craftguard2.list;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import com.sun.org.apache.xml.internal.serialize.XHTMLSerializer;
 
 /**
  * Data structure that reprensents a CraftGuard list/group

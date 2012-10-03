@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.config;
+package fr.frozentux.craftguard2.list;
 
 import java.util.ArrayList;
 
