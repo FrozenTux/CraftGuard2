@@ -3,30 +3,126 @@ package fr.frozentux.craftguard2.config;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import fr.frozentux.craftguard2.CraftGuardPlugin;
+import fr.frozentux.craftguard2.list.Id;
+import fr.frozentux.craftguard2.list.List;
+
 /**
- * Loads, writes and stores configuration options for CraftGuard
+ * Loads, writes and stores groups lists for CraftGuard
  * @author FrozenTux
  *
  */
 public class GroupsListFile {
 	
-	private Plugin plugin;
+	private CraftGuardPlugin plugin;
 	
-	private HashMap<String, HashMap<Integer, ArrayList<Integer>>> groupsLists;
+	private HashMap<String, List> groupsLists;
 	
 	private File configurationFile;
 	private FileConfiguration configuration;
 	
-	public GroupsListFile(Plugin plugin, FileConfiguration fileConfiguration, File file){
+	/**
+	 * Loads, writes and stores groups lists for CraftGuard
+	 * @author FrozenTux
+	 *
+	 */
+	public GroupsListFile(CraftGuardPlugin plugin, FileConfiguration fileConfiguration, File file){
 		this.plugin = plugin;
 		this.configurationFile = file;
 		this.configuration = fileConfiguration;
 	}
 	
+	/**
+	 * Loads the list from the {@link FileConfiguration} specified in the constructor
+	 */
+	public void load(){
+		
+		groupsLists = new HashMap<String, List>();
+		
+		if(!configurationFile.exists()){
+			HashMap<Integer, Id> exampleMap = new HashMap<Integer, Id>();
+			exampleMap.put(5, new Id(5));//PLANKS
+			exampleMap.put(35, new Id(35));
+			exampleMap.get(35).addMetadata(2);//Only purple WOOL
+			List exampleList = new List("example", "samplepermission", exampleMap, null);
+			
+			configuration.addDefault("example." + exampleList.getName() + ".list", encodeList(exampleList));
+			configuration.addDefault("example." + exampleList.getName() + ".permission", exampleList.getPermission());
+			configuration.options().header("CraftGuard 2.X by FrozenTux").copyDefaults(true);
+		}
+		
+		try {
+			configuration.load(configurationFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	/**
+	 * Returns an id from a raw config string (obtained via <code>serializeList()</code>
+	 * @param raw	The raw string to decode
+	 * @return		The corresponding id object
+	 */
+	public Id decodeId(String raw){
+		//First getting the base id
+		int id = Integer.valueOf(raw.split(":")[0]);
+		
+		//Then parsing metadata (if any)
+		if(raw.split(":").length > 1){
+			int length = raw.split(":").length;
+			ArrayList<Integer> metadata = new ArrayList<Integer>();
+			
+			for(int i = 1 ; i <= length ; i++){	//Starts at 1 because 0 is the id
+				metadata.add(Integer.valueOf(raw.split(":")[i]));
+			}
+			return new Id(id, metadata);
+			
+		}else{
+			return new Id(id);
+		}
+		
+	}
+	
+	/**
+	 * Encodes a list to a list of raw String ids
+	 * @param list	The list to encode
+	 * @return		The encoded list
+	 */
+	public ArrayList<String> encodeList(List list){
+		//Getting keys (list of ids)
+		HashMap<Integer, Id> map = list.getIds();
+		Set<Integer> keys = map.keySet();
+		Iterator<Integer> it = keys.iterator();
+		
+		ArrayList<String> ids = new ArrayList<String>();
+		
+		while(it.hasNext()){
+			//Parsing id
+			Id id = map.get(it.next());
+			String raw = String.valueOf(id.getId());
+			
+			//Parsing metadata (25665 is an impossible metadata so this is only processed if the id has metadata)
+			if(!id.hasMetadata(25665)){
+				ArrayList<Integer> metadata = id.getMetadata();
+				Iterator<Integer> metIt = metadata.iterator();
+				while(metIt.hasNext()){
+					raw.concat(":" + metIt.next());
+				}
+			}
+			
+			ids.add(raw);
+		}
+		
+		return ids;
+	}
 	
 	
 }
