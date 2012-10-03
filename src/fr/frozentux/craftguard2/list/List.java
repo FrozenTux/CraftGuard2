@@ -26,7 +26,7 @@ public class List {
 	 */
 	public List(String name, String permission,  HashMap<Integer, Id> ids, List parent){
 		this.name = name;
-		this.permission = permission;
+		this.permission = (permission == null) ? name : permission;
 		this.parent = parent;
 		this.ids = ids;
 		childs = new ArrayList<List>();
