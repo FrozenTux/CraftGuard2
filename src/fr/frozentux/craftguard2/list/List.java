@@ -46,7 +46,14 @@ public class List {
 				ids.get(id.getId()).addMetadata(i.next());
 			}
 		}else ids.put(id.getId(), id);
-		notifyChilds();
+		
+		//Adding the id to childs without rebuilding them
+		if(childs.size() > 0){
+			Iterator<List> it = childs.iterator();
+			while(it.hasNext()){
+				it.next().addId(id);
+			}
+		}
 	}
 	
 	/**
@@ -55,7 +62,7 @@ public class List {
 	 */
 	public void removeId(int id){
 		ids.remove(id);
-		notifyChilds();
+		rebuildChilds();
 	}
 	
 	/**
@@ -96,14 +103,25 @@ public class List {
 	 * This method is called by a parent class when it has been updated
 	 */
 	public void onParentUpdate(){
-		//TODO
+		//TODO	List rebuilding
 	}
 	
-	private void notifyChilds(){
+	private void rebuildChilds(){
 		Iterator<List> it = childs.iterator();
 		while(it.hasNext()){
 			it.next().onParentUpdate();
 		}
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
+	public String getPermission(){
+		return permission;
+	}
+	
+	public List getParent(){
+		return parent;
+	}
 }
