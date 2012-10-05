@@ -19,6 +19,22 @@ public class List {
 	
 	/**
 	 * Data structure that reprensents a CraftGuard list/group
+	 * This constructor initializes an empty list
+	 * @param name			The name of the list
+	 * @param permission	The permission of the list
+	 * @param parent		The parent group (may be null if no parent)
+	 */
+	public List(String name, String permission, List parent){
+		this.name = name;
+		this.permission = (permission == null) ? name : permission;
+		this.parent = parent;
+		this.ids = new HashMap<Integer, Id>();
+		childs = new ArrayList<List>();
+		if(parent != null)parent.registerChild(this);
+	}
+	
+	/**
+	 * Data structure that reprensents a CraftGuard list/group
 	 * @param name			The name of the list
 	 * @param permission	The permission of the list
 	 * @param ids			The Hashmap containing the ids and data values
