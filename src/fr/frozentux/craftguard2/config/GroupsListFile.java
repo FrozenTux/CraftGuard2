@@ -1,13 +1,13 @@
 package fr.frozentux.craftguard2.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.list.Id;
@@ -43,8 +43,10 @@ public class GroupsListFile {
 	 */
 	public void load(){
 		
+		//Initializing the groups list or clearing it
 		groupsLists = new HashMap<String, List>();
 		
+		//If the file doesn't exist, write defaults
 		if(!configurationFile.exists()){
 			HashMap<Integer, Id> exampleMap = new HashMap<Integer, Id>();
 			exampleMap.put(5, new Id(5));//PLANKS
@@ -55,15 +57,31 @@ public class GroupsListFile {
 			configuration.addDefault("example." + exampleList.getName() + ".list", encodeList(exampleList));
 			configuration.addDefault("example." + exampleList.getName() + ".permission", exampleList.getPermission());
 			configuration.options().header("CraftGuard 2.X by FrozenTux").copyDefaults(true);
+			try {
+				configuration.save(configurationFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
+		//Load the file
 		try {
 			configuration.load(configurationFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		Set<String> keys = configuration.getKeys(false);
+		Iterator<String> it = keys.iterator();
 		
+		while(it.hasNext()){	//This loop will be run for each list
+			String name = it.next();
+			List list = buildList(name);
+			list.importIdsFromParent();
+			groupsLists.put(name, list);
+		}
+		
+		plugin.getFrozenLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
 	}
 	
 	/**
@@ -122,6 +140,29 @@ public class GroupsListFile {
 		}
 		
 		return ids;
+	}
+	
+	/**
+	 * Builds a list from the given path in the FileConfiguration
+	 * @param path	The path of the list (also taken as it's name)
+	 * @return	The built list
+	 */
+	public List buildList(String path){
+		plugin.getFrozenLogger().debug("Building list " + path);
+		java.util.List<String> rawList = configuration.getStringList(path + ".list");
+		
+		String permission = configuration.getString(path + ".permission");	//Note : permission can be null, a check is done in the List object
+		String parentName = configuration.getString(path + ".parent");	//May also be null
+		List parent = groupsLists.get(parentName);
+		
+		Iterator<String> idIterator = rawList.iterator();
+		List list = new List(path, permission, parent);
+		
+		while(idIterator.hasNext()){
+			list.addId(decodeId(idIterator.next()));
+		}
+		
+		return list;
 	}
 	
 	

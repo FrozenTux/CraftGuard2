@@ -129,6 +129,20 @@ public class List {
 		}
 	}
 	
+	/**
+	 * Called when building a list to add the content of a parent list
+	 */
+	public void importIdsFromParent(){
+		if(parent == null)return;
+		
+		HashMap<Integer, Id> parentList = parent.getIds();
+		Iterator<Integer> it = parentList.keySet().iterator();
+		
+		while(it.hasNext()){
+			this.addId(parentList.get(it.next()));
+		}
+	}
+	
 	public String getName(){
 		return name;
 	}
