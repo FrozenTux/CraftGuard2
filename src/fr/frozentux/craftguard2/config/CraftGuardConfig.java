@@ -61,6 +61,9 @@ public class CraftGuardConfig {
 		plugin.getFrozenLogger().info("Configuration loaded !");
 	}
 	
+	/**
+	 * Writes the fields into the plugin's {@link FileConfiguration}
+	 */
 	public void write(){
 		Iterator<String> it = fields.keySet().iterator();
 		
@@ -71,5 +74,32 @@ public class CraftGuardConfig {
 		
 		plugin.saveConfig();
 		plugin.getFrozenLogger().info("Configuration saved !");
+	}
+	
+	/**
+	 * Gets the field corresponding to the given key
+	 * @param key	The key of the field
+	 * @return		<code>null</code> if the field doesn't exist;otherwise the field as an {@link Object}
+	 */
+	public Object getKey(String key){
+		return fields.get(key);
+	}
+	
+	/**
+	 * Gets the field corresponding to the given key
+	 * @param key	The key of the field
+	 * @return		<code>null</code> if the field doesn't exist;otherwise the field as an {@link String}
+	 */
+	public String getStringKey(String key){
+		return String.valueOf(fields.get(key));
+	}
+	
+	/**
+	 * Gets the field corresponding to the given key
+	 * @param key	The key of the field
+	 * @return		<code>null</code> if the field doesn't exist;otherwise the field as an {@link Boolean}
+	 */
+	public boolean getBooleanKey(String key){
+		return (Boolean)fields.get(key);
 	}
 }
