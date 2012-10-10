@@ -1,10 +1,12 @@
 package fr.frozentux.craftguard2.config.compat;
 
 import java.io.File;
-import java.util.Set;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 
@@ -37,15 +39,52 @@ public class CraftGuard1ConfigConverter {
 	}
 	
 	/**
-	 * Converts the configuration false
-	 * @return	If something has gone wrong
+	 * Converts the configuration file
 	 */
-	public boolean convert(){
+	public void convert(){
 		
-		Set<String> keys = config.getConfigurationSection("craftguard").getKeys(false);
+		Iterator<String> listIt = config.getConfigurationSection("craftguard").getKeys(false).iterator();
+		int listCount = 0;
 		
+		while(listIt.hasNext()){
+			String name = listIt.next();
+			String permission = config.getString("craftguard." + name + ".permision");
+			String parent = config.getString("craftguard." + name + ".inheritance");
+			List<String> rawList = config.getStringList("craftguard." + name + ".granted");
+			
+			list.set(name + ".list", rawList);
+			if(permission != null)list.set(name + ".permission", permission);
+			if(parent != null)list.set(name + ".parent", parent);
+			listCount++;
+		}
 		
+		Iterator<String> configIt = config.getConfigurationSection("config").getKeys(false).iterator();
+		HashMap<String, Object> fields = new HashMap<String, Object>();
 		
-		return true;
+		while(configIt.hasNext()){
+			String key = configIt.next();
+			fields.put(key, config.get(key));
+		}
+		
+		configFile.delete();
+		plugin.reloadConfig();
+		config = plugin.getConfig();
+		
+		configIt = fields.keySet().iterator();
+		
+		while(configIt.hasNext()){
+			String key = configIt.next();
+			config.set(key, fields.get(key));
+		}
+		
+		plugin.saveConfig();
+		
+		try {
+			list.save(listFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		plugin.getFrozenLogger().info("Succesfully converted " + listCount + "lists into lists.yml !");
 	}
 }
