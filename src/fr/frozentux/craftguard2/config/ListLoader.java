@@ -22,7 +22,7 @@ public class ListLoader {
 	
 	private CraftGuardPlugin plugin;
 	
-	private HashMap<String, List> groupsLists;
+	//private HashMap<String, List> groupsLists;
 	
 	private File configurationFile;
 	private FileConfiguration configuration;
@@ -40,11 +40,12 @@ public class ListLoader {
 	
 	/**
 	 * Loads the list from the {@link FileConfiguration} specified in the constructor
+	 * @return A HashMap of the loaded groups
 	 */
-	public void load(){
+	public HashMap<String, List> load(){
 		
 		//Initializing the groups list or clearing it
-		groupsLists = new HashMap<String, List>();
+		HashMap<String, List> groupsLists = new HashMap<String, List>();
 		
 		//If the file doesn't exist, write defaults
 		if(!configurationFile.exists()){
@@ -76,12 +77,14 @@ public class ListLoader {
 		
 		while(it.hasNext()){	//This loop will be run for each list
 			String name = it.next();
-			List list = buildList(name);
+			List list = buildList(name, groupsLists);
 			list.importIdsFromParent();
 			groupsLists.put(name, list);
 		}
 		
 		plugin.getFrozenLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
+		
+		return groupsLists;
 	}
 	
 	/**
@@ -147,7 +150,7 @@ public class ListLoader {
 	 * @param path	The path of the list (also taken as it's name)
 	 * @return	The built list
 	 */
-	public List buildList(String path){
+	public List buildList(String path, HashMap<String, List> groupsLists){
 		plugin.getFrozenLogger().debug("Building list " + path);
 		java.util.List<String> rawList = configuration.getStringList(path + ".list");
 		
