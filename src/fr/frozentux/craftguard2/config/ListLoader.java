@@ -18,7 +18,7 @@ import fr.frozentux.craftguard2.list.List;
  * @author FrozenTux
  *
  */
-public class GroupsListFile {
+public class ListLoader {
 	
 	private CraftGuardPlugin plugin;
 	
@@ -32,7 +32,7 @@ public class GroupsListFile {
 	 * @author FrozenTux
 	 *
 	 */
-	public GroupsListFile(CraftGuardPlugin plugin, FileConfiguration fileConfiguration, File file){
+	public ListLoader(CraftGuardPlugin plugin, FileConfiguration fileConfiguration, File file){
 		this.plugin = plugin;
 		this.configurationFile = file;
 		this.configuration = fileConfiguration;

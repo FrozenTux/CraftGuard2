@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.config;
+package fr.frozentux.craftguard2.smeltingmanager;
 
 import java.util.HashMap;
 
@@ -13,7 +13,7 @@ public class SmeltReference {
 	
 	private static SmeltReference singleton = new SmeltReference();
 	
-	public SmeltReference getReference(){
+	public static SmeltReference getReference(){
 		return singleton;
 	}
 	
@@ -30,6 +30,10 @@ public class SmeltReference {
 	
 	public void addSmelting(int id, int result){
 		reference.put(id, result);
+	}
+	
+	public void clearReference(){
+		reference = new HashMap<Integer, Integer>();
 	}
 
 }
