@@ -1,11 +1,13 @@
 package fr.frozentux.craftguard2.config;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
+import fr.frozentux.craftguard2.config.compat.CraftGuard1ConfigConverter;
 
 /**
  * Loads, writes and stores configuration options for CraftGuard
@@ -37,12 +39,19 @@ public class CraftGuardConfig {
 	public void load(){
 		plugin.reloadConfig();
 		
+		if(file.isSet("craftguard")){	//Old configuration type, needs to be converted
+			plugin.getFrozenLogger().info("Old configuration format has been detected ! Your file will be converted.");
+			File configFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+			new CraftGuard1ConfigConverter(plugin).convert();
+		}
+		
 		file.addDefault("checkFurnaces", true);
 		file.addDefault("preventiveallow", true);
 		file.addDefault("denyMessage", "You can't craft %n !");
 		file.addDefault("log", true);
 		file.addDefault("logMessage", "%p tried to craft %n(%i) but has been denied");
 		file.addDefault("basePerm", "craftguard");
+		file.addDefault("debug", false);
 		
 		if(!file.isSet("log")){
 			plugin.getFrozenLogger().info("Configuration file not detected ! Writing defaults...");
