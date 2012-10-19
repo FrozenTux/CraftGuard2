@@ -65,7 +65,10 @@ public class List {
 			while(i.hasNext()){
 				ids.get(id.getId()).addMetadata(i.next());
 			}
-		}else ids.put(id.getId(), id);
+		}else{
+			ids.put(id.getId(), id);
+			manager.addIdToCheckList(id.getId());
+		}
 		
 		//Adding the id to childs without rebuilding them
 		if(childs.size() > 0){
