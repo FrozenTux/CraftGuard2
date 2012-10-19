@@ -3,6 +3,7 @@ package fr.frozentux.craftguard2.list;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.config.ListLoader;
@@ -48,6 +49,10 @@ public class ListManager {
 	
 	public boolean inCheckList(int id){
 		return checkList.contains(id);
+	}
+	
+	public Set<String> getListsNames(){
+		return groupsLists.keySet();
 	}
 	
 }

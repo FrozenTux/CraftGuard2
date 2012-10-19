@@ -23,8 +23,8 @@ public class CraftGuardConfig {
 	
 	private HashMap<String, Object> fields;
 	
-	private String[] defaultKeys = {"checkFurnaces", "preventiveallow", "denyMessage", "log", "logMessage", "basePerm", "debug"};
-	private Object[] defaultValues = {true, true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "basePerm", false};
+	private String[] defaultKeys = {"checkfurnaces", "preventiveallow", "denymessage", "log", "logmessage", "baseperm", "debug", "notifyplayer"};
+	private Object[] defaultValues = {true, true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "basePerm", false, true};
 	
 	/**
 	 * Loads, writes and stores configuration options for CraftGuard

@@ -55,7 +55,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 		listManager = new ListManager(this, listLoader);
 		
 		//Listener init
-		playerListener = new PlayerListener();
+		playerListener = new PlayerListener(this);
 		this.getServer().getPluginManager().registerEvents(playerListener, this);
 		
 		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been enabled");
