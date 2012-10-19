@@ -1,6 +1,8 @@
 package fr.frozentux.craftguard2.list;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.config.ListLoader;
@@ -11,6 +13,8 @@ public class ListManager {
 	
 	private HashMap<String, List> groupsLists;
 	
+	private ArrayList<Integer> checkList;
+	
 	private ListLoader loader;
 	
 	public ListManager(CraftGuardPlugin plugin, ListLoader loader){
@@ -20,6 +24,7 @@ public class ListManager {
 	
 	public void init(){
 		groupsLists = loader.load();
+		checkList = new ArrayList<Integer>();
 	}
 	
 	public List getList(String name){
@@ -27,7 +32,22 @@ public class ListManager {
 	}
 	
 	public void addList(List list, boolean replaceIfExisting){
-		if(!groupsLists.containsKey(list.getName()) || replaceIfExisting)groupsLists.put(list.getName(), list);
+		if(!groupsLists.containsKey(list.getName()) || replaceIfExisting){
+			Iterator<Integer> it = list.getIds().keySet().iterator();
+			while(it.hasNext()){
+				int id = it.next();
+				if(!checkList.contains(id))checkList.add(id);
+			}
+			groupsLists.put(list.getName(), list);
+		}
+	}
+	
+	public void addIdToCheckList(int id){
+		if(!checkList.contains(id))checkList.add(id);
+	}
+	
+	public boolean inCheckList(int id){
+		return checkList.contains(id);
 	}
 	
 }

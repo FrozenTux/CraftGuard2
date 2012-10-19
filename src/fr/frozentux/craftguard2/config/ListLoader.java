@@ -53,7 +53,7 @@ public class ListLoader {
 			exampleMap.put(5, new Id(5));//PLANKS
 			exampleMap.put(35, new Id(35));
 			exampleMap.get(35).addMetadata(2);//Only purple WOOL
-			List exampleList = new List("example", "samplepermission", exampleMap, null);
+			List exampleList = new List("example", "samplepermission", exampleMap, null, plugin.getListManager());
 			
 			configuration.addDefault("example." + exampleList.getName() + ".list", encodeList(exampleList));
 			configuration.addDefault("example." + exampleList.getName() + ".permission", exampleList.getPermission());
@@ -159,7 +159,7 @@ public class ListLoader {
 		List parent = groupsLists.get(parentName);
 		
 		Iterator<String> idIterator = rawList.iterator();
-		List list = new List(path, permission, parent);
+		List list = new List(path, permission, parent, plugin.getListManager());
 		
 		while(idIterator.hasNext()){
 			list.addId(decodeId(idIterator.next()));
