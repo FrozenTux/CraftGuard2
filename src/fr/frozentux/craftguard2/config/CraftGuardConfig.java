@@ -44,7 +44,7 @@ public class CraftGuardConfig {
 		plugin.reloadConfig();
 		
 		if(file.isSet("craftguard")){	//Old configuration type, needs to be converted
-			plugin.getFrozenLogger().info("Old configuration format has been detected ! Your file will be converted.");
+			plugin.getCraftGuardLogger().info("Old configuration format has been detected ! Your file will be converted.");
 			new CraftGuard1ConfigConverter(plugin).convert();
 		}
 		
@@ -53,7 +53,7 @@ public class CraftGuardConfig {
 		}
 		
 		if(!file.isSet("log")){
-			plugin.getFrozenLogger().info("Configuration file not detected ! Writing defaults...");
+			plugin.getCraftGuardLogger().info("Configuration file not detected ! Writing defaults...");
 			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard\n\nIf you erase some values by error remove log line and missing default values will be rewritten !").copyHeader();
 			file.options().copyDefaults();
 			plugin.saveConfig();
@@ -66,7 +66,7 @@ public class CraftGuardConfig {
 			fields.put(key, file.get(key));
 		}
 		
-		plugin.getFrozenLogger().info("Configuration loaded !");
+		plugin.getCraftGuardLogger().info("Configuration loaded !");
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public class CraftGuardConfig {
 		}
 		
 		plugin.saveConfig();
-		plugin.getFrozenLogger().info("Configuration saved !");
+		plugin.getCraftGuardLogger().info("Configuration saved !");
 	}
 	
 	/**

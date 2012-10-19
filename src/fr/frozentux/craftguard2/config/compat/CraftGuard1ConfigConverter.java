@@ -1,13 +1,11 @@
 package fr.frozentux.craftguard2.config.compat;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -93,6 +91,6 @@ public class CraftGuard1ConfigConverter {
 			e.printStackTrace();
 		}
 		
-		plugin.getFrozenLogger().info("Succesfully converted " + listCount + "lists into lists.yml !");
+		plugin.getCraftGuardLogger().info("Succesfully converted " + listCount + "lists into lists.yml !");
 	}
 }

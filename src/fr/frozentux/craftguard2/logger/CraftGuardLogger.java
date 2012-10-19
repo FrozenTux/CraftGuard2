@@ -12,13 +12,13 @@ import org.bukkit.plugin.Plugin;
  * @author FrozenTux
  *
  */
-public class FrozenLogger {
+public class CraftGuardLogger {
 	
 	private Logger logger;
 	
 	private Plugin plugin;
-	private boolean debug, playerDebug;
-	private String debugPlayerName;
+	private boolean debug = false, playerDebug = false;
+	private String debugPlayerName = "FrozenTux";
 	
 	/**
 	 * A little extension to logger, capable to send debug messages to a player
@@ -26,28 +26,18 @@ public class FrozenLogger {
 	 * @param plugin	The plugin using this logger
 	 * @param debug		If true messages with level debug will be shown
 	 */
-	public FrozenLogger(Plugin plugin, boolean debug){
+	public CraftGuardLogger(Plugin plugin){
 		this.plugin = plugin;
 		this.logger = plugin.getLogger();
-		this.debug = debug;
-		if(debug){
-			debug("Debug messages enabled. Debug-to-player disabled");
-		}
 	}
 	
 	/**
-	 * A little extension to logger, capable to send debug messages to a player
-	 * This constructor enables debug to player if debug is set to true
-	 * @param plugin			The plugin using this logger
-	 * @param debug				If true messages with level debug will be shown
-	 * @param debugPlayerName	The name of the player who has to receive debug messages
+	 * Enables debug and debug to player
 	 */
-	public FrozenLogger(Plugin plugin, boolean debug, String debugPlayerName){
-		this.plugin = plugin;
-		this.debug = debug;
-		this.playerDebug = debug;
-		this.debugPlayerName = debugPlayerName;
-		if(debug)debug("Debug messages enabled. Debug-to-player enabled on " + debugPlayerName);
+	public void enableDebug(){
+		this.debug = true;
+		this.playerDebug = true;
+		debug("Debugging enabled !");
 	}
 	
 	/**

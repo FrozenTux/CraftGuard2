@@ -43,7 +43,7 @@ public class SmeltFile {
 			}
 		}
 		
-		if(customCount != 0)plugin.getFrozenLogger().info("Smelting Manager : Loaded " + baseCount + customCount + " smeltings (" + customCount + " custom)");
+		if(customCount != 0)plugin.getCraftGuardLogger().info("Smelting Manager : Loaded " + baseCount + customCount + " smeltings (" + customCount + " custom)");
 		
 	}
 	

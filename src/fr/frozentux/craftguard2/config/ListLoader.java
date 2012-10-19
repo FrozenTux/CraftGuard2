@@ -82,7 +82,7 @@ public class ListLoader {
 			groupsLists.put(name, list);
 		}
 		
-		plugin.getFrozenLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
+		plugin.getCraftGuardLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
 		
 		return groupsLists;
 	}
@@ -151,7 +151,7 @@ public class ListLoader {
 	 * @return	The built list
 	 */
 	public List buildList(String path, HashMap<String, List> groupsLists){
-		plugin.getFrozenLogger().debug("Building list " + path);
+		plugin.getCraftGuardLogger().debug("Building list " + path);
 		java.util.List<String> rawList = configuration.getStringList(path + ".list");
 		
 		String permission = configuration.getString(path + ".permission");	//Note : permission can be null, a check is done in the List object
