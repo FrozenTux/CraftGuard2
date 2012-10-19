@@ -1,11 +1,14 @@
 package fr.frozentux.craftguard2.config;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.config.compat.CraftGuard1ConfigConverter;
@@ -19,6 +22,7 @@ public class CraftGuardConfig {
 	
 	private CraftGuardPlugin plugin;
 	
+	private File configFile;
 	private FileConfiguration file;
 	
 	private HashMap<String, Object> fields;
@@ -34,14 +38,19 @@ public class CraftGuardConfig {
 	public CraftGuardConfig(CraftGuardPlugin plugin){
 		this.plugin = plugin;
 		fields = new HashMap<String, Object>();
-		file = plugin.getConfig();
+		configFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+		file = new YamlConfiguration();
 	}
 	
 	/**
 	 * Loads the configuration from the config file, erasing values in memory
 	 */
 	public void load(){
-		plugin.reloadConfig();
+		try {
+			file.load(configFile);
+		} catch (Exception e) {
+			
+		}
 		
 		if(file.isSet("craftguard")){	//Old configuration type, needs to be converted
 			plugin.getCraftGuardLogger().info("Old configuration format has been detected ! Your file will be converted.");
@@ -55,8 +64,12 @@ public class CraftGuardConfig {
 		if(!file.isSet("log")){
 			plugin.getCraftGuardLogger().info("Configuration file not detected ! Writing defaults...");
 			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard\n\nIf you erase some values by error remove log line and missing default values will be rewritten !").copyHeader();
-			file.options().copyDefaults();
-			plugin.saveConfig();
+			file.options().copyDefaults(true);
+			try {
+				file.save(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		Iterator<String> it = file.getKeys(false).iterator();
@@ -80,7 +93,11 @@ public class CraftGuardConfig {
 			file.set(key, fields.get(key));
 		}
 		
-		plugin.saveConfig();
+		try {
+			file.save(configFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		plugin.getCraftGuardLogger().info("Configuration saved !");
 	}
 	

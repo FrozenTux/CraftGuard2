@@ -1,11 +1,13 @@
 package fr.frozentux.craftguard2.config.compat;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -33,15 +35,16 @@ public class CraftGuard1ConfigConverter {
 	 */
 	public CraftGuard1ConfigConverter(CraftGuardPlugin plugin){
 		this.listFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "lists.yml");
-		this.config = plugin.getConfig();
+		this.configFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+		this.config = new YamlConfiguration();
 		this.list = new YamlConfiguration();
 		try {
 			list.load(listFile);
+			config.load(configFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		this.plugin = plugin;
-		this.configFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 	}
 	
 	/**
@@ -73,8 +76,11 @@ public class CraftGuard1ConfigConverter {
 		}
 		
 		configFile.delete();
-		plugin.reloadConfig();
-		config = plugin.getConfig();
+		try {
+			config.load(configFile);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		
 		configIt = fields.keySet().iterator();
 		
@@ -83,7 +89,11 @@ public class CraftGuard1ConfigConverter {
 			config.set(key, fields.get(key));
 		}
 		
-		plugin.saveConfig();
+		try {
+			config.save(configFile);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			list.save(listFile);

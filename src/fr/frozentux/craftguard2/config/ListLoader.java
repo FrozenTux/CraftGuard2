@@ -49,15 +49,16 @@ public class ListLoader {
 		
 		//If the file doesn't exist, write defaults
 		if(!configurationFile.exists()){
+			plugin.getCraftGuardLogger().debug("ListFile not existing");
 			HashMap<Integer, Id> exampleMap = new HashMap<Integer, Id>();
 			exampleMap.put(5, new Id(5));//PLANKS
 			exampleMap.put(35, new Id(35));
 			exampleMap.get(35).addMetadata(2);//Only purple WOOL
 			List exampleList = new List("example", "samplepermission", exampleMap, null, plugin.getListManager());
 			
-			configuration.addDefault("example." + exampleList.getName() + ".list", encodeList(exampleList));
-			configuration.addDefault("example." + exampleList.getName() + ".permission", exampleList.getPermission());
-			configuration.options().header("CraftGuard 2.X by FrozenTux").copyDefaults(true);
+			configuration.addDefault(exampleList.getName() + ".list", encodeList(exampleList));
+			configuration.addDefault(exampleList.getName() + ".permission", exampleList.getPermission());
+			configuration.options().header("CraftGuard 2.X by FrozenTux").copyHeader(true).copyDefaults(true);
 			try {
 				configuration.save(configurationFile);
 			} catch (IOException e) {
@@ -101,7 +102,7 @@ public class ListLoader {
 			int length = raw.split(":").length;
 			ArrayList<Integer> metadata = new ArrayList<Integer>();
 			
-			for(int i = 1 ; i <= length ; i++){	//Starts at 1 because 0 is the id
+			for(int i = 1 ; i < length ; i++){	//Starts at 1 because 0 is the id
 				metadata.add(Integer.valueOf(raw.split(":")[i]));
 			}
 			return new Id(id, metadata);
@@ -118,6 +119,7 @@ public class ListLoader {
 	 * @return		The encoded list
 	 */
 	public ArrayList<String> encodeList(List list){
+		plugin.getCraftGuardLogger().debug("Encoding list " + list.getName());
 		//Getting keys (list of ids)
 		HashMap<Integer, Id> map = list.getIds();
 		Set<Integer> keys = map.keySet();
@@ -126,6 +128,7 @@ public class ListLoader {
 		ArrayList<String> ids = new ArrayList<String>();
 		
 		while(it.hasNext()){
+			
 			//Parsing id
 			Id id = map.get(it.next());
 			String raw = String.valueOf(id.getId());
@@ -135,10 +138,9 @@ public class ListLoader {
 				ArrayList<Integer> metadata = id.getMetadata();
 				Iterator<Integer> metIt = metadata.iterator();
 				while(metIt.hasNext()){
-					raw.concat(":" + metIt.next());
+					raw += ":" + metIt.next();
 				}
 			}
-			
 			ids.add(raw);
 		}
 		

@@ -53,6 +53,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "lists.yml");
 		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
 		listManager = new ListManager(this, listLoader);
+		listManager.init();
 		
 		//Listener init
 		playerListener = new PlayerListener(this);
@@ -63,6 +64,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 	}
 	
 	public void onDisable(){
+		config.write();
 		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been disabled");
 	}
 	

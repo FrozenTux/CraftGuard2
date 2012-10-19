@@ -24,8 +24,8 @@ public class ListManager {
 	}
 	
 	public void init(){
-		groupsLists = loader.load();
 		checkList = new ArrayList<Integer>();
+		groupsLists = loader.load();
 	}
 	
 	public List getList(String name){
