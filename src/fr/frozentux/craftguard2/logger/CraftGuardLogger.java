@@ -67,7 +67,7 @@ public class CraftGuardLogger {
 	 * @param message	Message to log
 	 */
 	public void debug(String message){
-		if(debug)logger.log(Level.FINE, "(Debug) " + message);
+		if(debug)logger.log(Level.INFO, "(Debug) " + message);
 		if(playerDebug){
 			debugToPlayer(message, "DEBUG");
 		}
