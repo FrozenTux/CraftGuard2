@@ -1,8 +1,9 @@
 package fr.frozentux.craftguard2.config;
 
-import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -21,6 +22,9 @@ public class CraftGuardConfig {
 	private FileConfiguration file;
 	
 	private HashMap<String, Object> fields;
+	
+	private String[] defaultKeys = {"checkFurnaces", "preventiveallow", "denyMessage", "log", "logMessage", "basePerm", "debug"};
+	private Object[] defaultValues = {true, true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "basePerm", false};
 	
 	/**
 	 * Loads, writes and stores configuration options for CraftGuard
@@ -41,21 +45,16 @@ public class CraftGuardConfig {
 		
 		if(file.isSet("craftguard")){	//Old configuration type, needs to be converted
 			plugin.getFrozenLogger().info("Old configuration format has been detected ! Your file will be converted.");
-			File configFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 			new CraftGuard1ConfigConverter(plugin).convert();
 		}
 		
-		file.addDefault("checkFurnaces", true);
-		file.addDefault("preventiveallow", true);
-		file.addDefault("denyMessage", "You can't craft %n !");
-		file.addDefault("log", true);
-		file.addDefault("logMessage", "%p tried to craft %n(%i) but has been denied");
-		file.addDefault("basePerm", "craftguard");
-		file.addDefault("debug", false);
+		for(int i = 0 ; i<defaultKeys.length ; i++){
+			file.addDefault(defaultKeys[i], defaultValues[i]);
+		}
 		
 		if(!file.isSet("log")){
 			plugin.getFrozenLogger().info("Configuration file not detected ! Writing defaults...");
-			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard").copyHeader();
+			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard\n\nIf you erase some values by error remove log line and missing default values will be rewritten !").copyHeader();
 			file.options().copyDefaults();
 			plugin.saveConfig();
 		}
@@ -91,7 +90,10 @@ public class CraftGuardConfig {
 	 * @return		<code>null</code> if the field doesn't exist;otherwise the field as an {@link Object}
 	 */
 	public Object getKey(String key){
-		return fields.get(key);
+		Object value = fields.get(key);
+		List<String> defaultList = Arrays.asList(defaultKeys);
+		if(value == null && defaultList.contains(key))value = Arrays.asList(defaultValues).get(defaultList.indexOf(key));
+		return value;
 	}
 	
 	/**
@@ -100,7 +102,7 @@ public class CraftGuardConfig {
 	 * @return		<code>null</code> if the field doesn't exist;otherwise the field as an {@link String}
 	 */
 	public String getStringKey(String key){
-		return String.valueOf(fields.get(key));
+		return String.valueOf(getKey(key));
 	}
 	
 	/**
@@ -109,6 +111,6 @@ public class CraftGuardConfig {
 	 * @return		<code>null</code> if the field doesn't exist;otherwise the field as an {@link Boolean}
 	 */
 	public boolean getBooleanKey(String key){
-		return (Boolean)fields.get(key);
+		return (Boolean)getKey(key);
 	}
 }
