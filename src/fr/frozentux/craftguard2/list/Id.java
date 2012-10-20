@@ -1,6 +1,7 @@
 package fr.frozentux.craftguard2.list;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Data structure reprensenting an ID with it's metadata
@@ -71,6 +72,37 @@ public class Id {
 	 */
 	public int getId(){
 		return id;
+	}
+	
+	/**
+	 * Returns a string representing this id object under the form :<br/>
+	 * <code>"id:metadata:metadata:[...]"</code>
+	 */
+	public String toString(){
+		String result = String.valueOf(id);
+		if(!this.overrideAllMetadata){
+			Iterator<Integer> it = metadata.iterator();
+			while(it.hasNext()){
+				result = result + ":" + it.next();
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Merge this id's metadata with an other id
+	 * @param otherId	The id to merge with
+	 * @return			The merged id; or self if ids are not of the same type
+	 */
+	public Id merge(Id otherId){
+		if(this.id != otherId.getId())return this;
+		
+		Id merged = new Id(id, metadata);
+		Iterator<Integer> it = otherId.getMetadata().iterator();
+		while(it.hasNext())merged.addMetadata(it.next());
+		
+		return merged;
 	}
 	
 }

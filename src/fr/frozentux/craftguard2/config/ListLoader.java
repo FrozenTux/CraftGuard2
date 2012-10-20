@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.list.Id;
 import fr.frozentux.craftguard2.list.List;
+import fr.frozentux.craftguard2.list.ListManager;
 
 /**
  * Loads, writes and stores groups lists for CraftGuard
@@ -21,8 +22,6 @@ import fr.frozentux.craftguard2.list.List;
 public class ListLoader {
 	
 	private CraftGuardPlugin plugin;
-	
-	//private HashMap<String, List> groupsLists;
 	
 	private File configurationFile;
 	private FileConfiguration configuration;
@@ -79,7 +78,6 @@ public class ListLoader {
 		while(it.hasNext()){	//This loop will be run for each list
 			String name = it.next();
 			List list = buildList(name, groupsLists);
-			list.importIdsFromParent();
 			groupsLists.put(name, list);
 		}
 		
@@ -121,28 +119,13 @@ public class ListLoader {
 	public ArrayList<String> encodeList(List list){
 		plugin.getCraftGuardLogger().debug("Encoding list " + list.getName());
 		//Getting keys (list of ids)
-		HashMap<Integer, Id> map = list.getIds();
+		HashMap<Integer, Id> map = list.getIds(false);
 		Set<Integer> keys = map.keySet();
 		Iterator<Integer> it = keys.iterator();
 		
 		ArrayList<String> ids = new ArrayList<String>();
 		
-		while(it.hasNext()){
-			
-			//Parsing id
-			Id id = map.get(it.next());
-			String raw = String.valueOf(id.getId());
-			
-			//Parsing metadata (25665 is an impossible metadata so this is only processed if the id has metadata)
-			if(!id.hasMetadata(25665)){
-				ArrayList<Integer> metadata = id.getMetadata();
-				Iterator<Integer> metIt = metadata.iterator();
-				while(metIt.hasNext()){
-					raw += ":" + metIt.next();
-				}
-			}
-			ids.add(raw);
-		}
+		while(it.hasNext())ids.add(map.get(it.next()).toString());
 		
 		return ids;
 	}
@@ -168,6 +151,37 @@ public class ListLoader {
 		}
 		
 		return list;
+	}
+	
+	public void writeLists(ListManager manager){
+		plugin.getCraftGuardLogger().info("Saving " + manager.getListsNames().size() + " lists...");
+		
+		configurationFile.delete();
+		try{
+			configurationFile.createNewFile();
+			configuration.load(configurationFile);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		configuration.options().header("CraftGuard 2.X by FrozenTux").copyHeader(true);
+		
+		Iterator<String> it = manager.getListsNames().iterator();
+		
+		while(it.hasNext()){
+			List list = manager.getList(it.next());
+			configuration.set(list.getName() + ".list", encodeList(list));
+			if(!list.getPermission().equals(list.getName()))configuration.set(list.getName() + ".permission", list.getPermission());
+			if(!(list.getParent() == null))configuration.set(list.getName() + ".parent", list.getParent().getName());
+		}
+		
+		try {
+			configuration.save(configurationFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	

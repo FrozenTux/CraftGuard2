@@ -1,6 +1,5 @@
 package fr.frozentux.craftguard2.list;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -13,7 +12,6 @@ public class List {
 	
 	private String name, permission;
 	private List parent;
-	private ArrayList<List> childs;
 	private ListManager manager;
 	
 	private HashMap<Integer, Id> ids;
@@ -31,8 +29,6 @@ public class List {
 		this.permission = (permission == null) ? name : permission;
 		this.parent = parent;
 		this.ids = new HashMap<Integer, Id>();
-		childs = new ArrayList<List>();
-		if(parent != null)parent.registerChild(this);
 		this.manager = manager;
 	}
 	
@@ -49,8 +45,6 @@ public class List {
 		this.permission = (permission == null) ? name : permission;
 		this.parent = parent;
 		this.ids = ids;
-		childs = new ArrayList<List>();
-		if(parent != null)parent.registerChild(this);
 	}
 	
 	/**
@@ -60,8 +54,7 @@ public class List {
 	 */
 	public void addId(Id id){
 		if(ids.containsKey(id.getId())){
-			ArrayList<Integer> metadata = id.getMetadata();
-			Iterator<Integer> i = metadata.iterator();
+			Iterator<Integer> i = id.getMetadata().iterator();
 			while(i.hasNext()){
 				ids.get(id.getId()).addMetadata(i.next());
 			}
@@ -70,13 +63,6 @@ public class List {
 			manager.addIdToCheckList(id.getId());
 		}
 		
-		//Adding the id to childs without rebuilding them
-		if(childs.size() > 0){
-			Iterator<List> it = childs.iterator();
-			while(it.hasNext()){
-				it.next().addId(id);
-			}
-		}
 	}
 	
 	/**
@@ -85,7 +71,6 @@ public class List {
 	 */
 	public void removeId(int id){
 		ids.remove(id);
-		rebuildChilds();
 	}
 	
 	/**
@@ -94,7 +79,7 @@ public class List {
 	 * @return	true if the list contains the id
 	 */
 	public boolean containsId(int id){
-		return ids.containsKey(id);
+		return (ids.containsKey(id) || (parent != null && parent.containsId(id)));
 	}
 	
 	/**
@@ -103,51 +88,28 @@ public class List {
 	 * @return	The id object corresponding to the given id if the list contains it; null otherwise
 	 */
 	public Id getId(int id){
-		return ids.get(id);
+		if(parent != null && parent.containsId(id))return ids.get(id).merge(parent.getId(id));
+		else return ids.get(id);
 	}
 	
 	/**
 	 * Returns the whole list of ids
+	 * If this list has a parent, the returned map will contain ids from the parent list as well
+	 * @return	A map of the ids
 	 */
-	@SuppressWarnings("unchecked")
-	public HashMap<Integer, Id> getIds(){
-		return (HashMap<Integer, Id>) ids.clone();
-	}
-	
-	/**
-	 * Registers a child of this class to be notified when the list updates
-	 * @param child	Child to register
-	 */
-	public void registerChild(List child){
-		childs.add(child);
-	}
-	
-	/**
-	 * This method is called by a parent class when it has been updated
-	 */
-	public void onParentUpdate(){
-		//TODO	List rebuilding
-	}
-	
-	private void rebuildChilds(){
-		Iterator<List> it = childs.iterator();
-		while(it.hasNext()){
-			it.next().onParentUpdate();
-		}
-	}
-	
-	/**
-	 * Called when building a list to add the content of a parent list
-	 */
-	public void importIdsFromParent(){
-		if(parent == null)return;
+	public HashMap<Integer, Id> getIds(boolean containParents){
+		if(!containParents || parent == null)return ids;
 		
-		HashMap<Integer, Id> parentList = parent.getIds();
-		Iterator<Integer> it = parentList.keySet().iterator();
+		HashMap<Integer, Id> mergedMap = ids;
+		Iterator<Integer> it = parent.getIds(true).keySet().iterator();
 		
 		while(it.hasNext()){
-			this.addId(parentList.get(it.next()));
+			int id = it.next();
+			if(mergedMap.containsKey(id)) mergedMap.put(id, mergedMap.get(id).merge(parent.getId(id)));
+			else mergedMap.put(id, parent.getId(id));
 		}
+		
+		return mergedMap;
 	}
 	
 	public String getName(){

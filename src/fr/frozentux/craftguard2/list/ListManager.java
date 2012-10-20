@@ -34,7 +34,7 @@ public class ListManager {
 	
 	public void addList(List list, boolean replaceIfExisting){
 		if(!groupsLists.containsKey(list.getName()) || replaceIfExisting){
-			Iterator<Integer> it = list.getIds().keySet().iterator();
+			Iterator<Integer> it = list.getIds(false).keySet().iterator();
 			while(it.hasNext()){
 				int id = it.next();
 				if(!checkList.contains(id))checkList.add(id);
