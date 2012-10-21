@@ -1,7 +1,10 @@
 package fr.frozentux.craftguard2.list;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import org.bukkit.Material;
 
 /**
  * Data structure that reprensents a CraftGuard list/group
@@ -24,10 +27,10 @@ public class List {
 	 * @param parent		The parent list (may be null if no parent)
 	 * @param manager		The {@link ListManager} storing this list
 	 */
-	public List(String name, String permission, List parent, ListManager manager){
+	public List(String name, String permission, String parent, ListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
-		this.parent = parent;
+		this.parent = manager.getList(parent);
 		this.ids = new HashMap<Integer, Id>();
 		this.manager = manager;
 	}
@@ -40,11 +43,26 @@ public class List {
 	 * @param parent		The parent list (may be null if no parent)
 	 * @param manager		The {@link ListManager} storing this list
 	 */
-	public List(String name, String permission,  HashMap<Integer, Id> ids, List parent, ListManager manager){
+	public List(String name, String permission,  HashMap<Integer, Id> ids, String parent, ListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
-		this.parent = parent;
+		this.parent = manager.getList(parent);
 		this.ids = ids;
+		this.manager = manager;
+	}
+	
+	public List(String name, String permission,  java.util.List<String> ids, String parent, ListManager manager){
+		this.name = name;
+		this.permission = (permission == null) ? name : permission;
+		this.parent = manager.getList(parent);
+		this.ids = new HashMap<Integer, Id>();
+		
+		Iterator<String> it = ids.iterator();
+		while(it.hasNext()){
+			this.addId(new Id(it.next()));
+		}
+		
+		this.manager = manager;
 	}
 	
 	/**
@@ -122,5 +140,28 @@ public class List {
 	
 	public List getParent(){
 		return parent;
+	}
+	
+	public String toString(boolean containingParent){
+		String result = this.name + ":\n";
+		Iterator<Id> it = this.getIds(containingParent).values().iterator();
+		
+		while(it.hasNext()){
+			Id id = it.next();
+			result = result + "- " + Material.getMaterial(id.getId()).name() + "(" + id.toString() + ")\n"; 
+		}
+		
+		return result;
+	}
+	
+	public java.util.List<String> toStringList(boolean containingParent){
+		ArrayList<String> result = new ArrayList<String>();
+		Iterator<Id> it = this.getIds(containingParent).values().iterator();
+		
+		while(it.hasNext()){
+			result.add(it.next().toString());
+		}
+		
+		return result;
 	}
 }

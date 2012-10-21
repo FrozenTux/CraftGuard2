@@ -55,7 +55,7 @@ public class ListLoader {
 			exampleMap.get(35).addMetadata(2);//Only purple WOOL
 			List exampleList = new List("example", "samplepermission", exampleMap, null, plugin.getListManager());
 			
-			configuration.addDefault(exampleList.getName() + ".list", encodeList(exampleList));
+			configuration.addDefault(exampleList.getName() + ".list", exampleList.toStringList(false));
 			configuration.addDefault(exampleList.getName() + ".permission", exampleList.getPermission());
 			configuration.options().header("CraftGuard 2.X by FrozenTux").copyHeader(true).copyDefaults(true);
 			try {
@@ -77,55 +77,14 @@ public class ListLoader {
 		
 		while(it.hasNext()){	//This loop will be run for each list
 			String name = it.next();
-			List list = buildList(name, groupsLists);
-			groupsLists.put(name, list);
+			String permission = configuration.getString(name + ".permission");
+			String parent = configuration.getString(name + ".parent");
+			groupsLists.put(name, new List(name, permission, configuration.getStringList(name + ".list"), parent, plugin.getListManager()));
 		}
 		
 		plugin.getCraftGuardLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
 		
 		return groupsLists;
-	}
-	
-	/**
-	 * Encodes a list to a list of raw String ids
-	 * @param list	The list to encode
-	 * @return		The encoded list
-	 */
-	public ArrayList<String> encodeList(List list){
-		plugin.getCraftGuardLogger().debug("Encoding list " + list.getName());
-		//Getting keys (list of ids)
-		HashMap<Integer, Id> map = list.getIds(false);
-		Set<Integer> keys = map.keySet();
-		Iterator<Integer> it = keys.iterator();
-		
-		ArrayList<String> ids = new ArrayList<String>();
-		
-		while(it.hasNext())ids.add(map.get(it.next()).toString());
-		
-		return ids;
-	}
-	
-	/**
-	 * Builds a list from the given path in the FileConfiguration
-	 * @param path	The path of the list (also taken as it's name)
-	 * @return	The built list
-	 */
-	public List buildList(String path, HashMap<String, List> groupsLists){
-		plugin.getCraftGuardLogger().debug("Building list " + path);
-		java.util.List<String> rawList = configuration.getStringList(path + ".list");
-		
-		String permission = configuration.getString(path + ".permission");	//Note : permission can be null, a check is done in the List object
-		String parentName = configuration.getString(path + ".parent");	//May also be null
-		List parent = groupsLists.get(parentName);
-		
-		Iterator<String> idIterator = rawList.iterator();
-		List list = new List(path, permission, parent, plugin.getListManager());
-		
-		while(idIterator.hasNext()){
-			list.addId(new Id(idIterator.next()));
-		}
-		
-		return list;
 	}
 	
 	public void writeLists(ListManager manager){
@@ -145,7 +104,7 @@ public class ListLoader {
 		
 		while(it.hasNext()){
 			List list = manager.getList(it.next());
-			configuration.set(list.getName() + ".list", encodeList(list));
+			configuration.set(list.getName() + ".list", list.toStringList(false));
 			if(!list.getPermission().equals(list.getName()))configuration.set(list.getName() + ".permission", list.getPermission());
 			if(!(list.getParent() == null))configuration.set(list.getName() + ".parent", list.getParent().getName());
 		}
