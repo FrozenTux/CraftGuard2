@@ -11,6 +11,7 @@ import fr.frozentux.craftguard2.config.*;
 import fr.frozentux.craftguard2.list.*;
 import fr.frozentux.craftguard2.listener.*;
 import fr.frozentux.craftguard2.logger.*;
+import fr.frozentux.craftguard2.smeltingmanager.*;
 
 /**
  * CraftGuard 2 Plugin
@@ -31,6 +32,8 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	private PlayerListener playerListener;
 	private CraftPermissionChecker permissionChecker;
+	
+	private SmeltFile smeltFile;
 	
 	public void onEnable(){
 		//Logger init
@@ -59,8 +62,11 @@ public class CraftGuardPlugin extends JavaPlugin {
 		playerListener = new PlayerListener(this);
 		this.getServer().getPluginManager().registerEvents(playerListener, this);
 		
-		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been enabled");
+		//Smelting init
+		smeltFile = new SmeltFile(new YamlConfiguration(), new File(this.getDataFolder().getAbsolutePath() + File.separator + "smelting.yml"), this);
+		smeltFile.load();
 		
+		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been enabled");
 	}
 	
 	public void onDisable(){
@@ -87,6 +93,10 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	public CraftPermissionChecker getPermissionChecker(){
 		return permissionChecker;
+	}
+	
+	public SmeltFile getSmeltFile(){
+		return smeltFile;
 	}
 	
 }
