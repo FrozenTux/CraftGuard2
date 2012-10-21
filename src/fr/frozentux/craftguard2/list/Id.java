@@ -32,6 +32,26 @@ public class Id {
 	}
 	
 	/**
+	 * Data structure reprensenting an ID with it's metadata
+	 * @param raw	The raw Id under the form <code>id:metadata:metadata:[...]</code>
+	 */
+	public Id(String raw){
+		this.id = Integer.valueOf(raw.split(":")[0]);
+		this.metadata = new ArrayList<Integer>();
+				
+		if(raw.split(":").length > 1){
+			int length = raw.split(":").length;
+					
+			for(int i = 1 ; i < length ; i++){
+				metadata.add(Integer.valueOf(raw.split(":")[i]));
+			}
+		
+		}else{
+			this.overrideAllMetadata = true;
+		}
+	}
+	
+	/**
 	 * Adds a metadata to the metadata list
 	 * @param metadata	The metadata to add
 	 */

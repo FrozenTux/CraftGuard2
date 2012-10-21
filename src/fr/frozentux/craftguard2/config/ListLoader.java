@@ -87,31 +87,6 @@ public class ListLoader {
 	}
 	
 	/**
-	 * Returns an id from a raw config string (obtained via <code>serializeList()</code>
-	 * @param raw	The raw string to decode
-	 * @return		The corresponding id object
-	 */
-	public Id decodeId(String raw){
-		//First getting the base id
-		int id = Integer.valueOf(raw.split(":")[0]);
-		
-		//Then parsing metadata (if any)
-		if(raw.split(":").length > 1){
-			int length = raw.split(":").length;
-			ArrayList<Integer> metadata = new ArrayList<Integer>();
-			
-			for(int i = 1 ; i < length ; i++){	//Starts at 1 because 0 is the id
-				metadata.add(Integer.valueOf(raw.split(":")[i]));
-			}
-			return new Id(id, metadata);
-			
-		}else{
-			return new Id(id);
-		}
-		
-	}
-	
-	/**
 	 * Encodes a list to a list of raw String ids
 	 * @param list	The list to encode
 	 * @return		The encoded list
@@ -147,7 +122,7 @@ public class ListLoader {
 		List list = new List(path, permission, parent, plugin.getListManager());
 		
 		while(idIterator.hasNext()){
-			list.addId(decodeId(idIterator.next()));
+			list.addId(new Id(idIterator.next()));
 		}
 		
 		return list;
