@@ -87,7 +87,7 @@ public class ListLoader {
 		return groupsLists;
 	}
 	
-	public void writeLists(ListManager manager){
+	public void writeAllLists(ListManager manager){
 		plugin.getCraftGuardLogger().info("Saving " + manager.getListsNames().size() + " lists...");
 		
 		configurationFile.delete();
@@ -103,10 +103,7 @@ public class ListLoader {
 		Iterator<String> it = manager.getListsNames().iterator();
 		
 		while(it.hasNext()){
-			List list = manager.getList(it.next());
-			configuration.set(list.getName() + ".list", list.toStringList(false));
-			if(!list.getPermission().equals(list.getName()))configuration.set(list.getName() + ".permission", list.getPermission());
-			if(!(list.getParent() == null))configuration.set(list.getName() + ".parent", list.getParent().getName());
+			writeList(manager.getList(it.next()), false);
 		}
 		
 		try {
@@ -115,7 +112,20 @@ public class ListLoader {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void writeList(List list, boolean save){
+		configuration.set(list.getName() + ".list", list.toStringList(false));
+		if(!list.getPermission().equals(list.getName()))configuration.set(list.getName() + ".permission", list.getPermission());
+		if(!(list.getParent() == null))configuration.set(list.getName() + ".parent", list.getParent().getName());
 		
+		if(save){
+			try {
+				configuration.save(configurationFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
