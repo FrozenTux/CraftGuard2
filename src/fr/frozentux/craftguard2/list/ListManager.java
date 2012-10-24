@@ -55,4 +55,16 @@ public class ListManager {
 		return groupsLists.keySet();
 	}
 	
+	public void saveList(List list){
+		loader.writeList(list, true);
+	}
+	
+	public void saveLists(){
+		loader.writeAllLists(this);
+	}
+	
+	public void removeList(String list){
+		groupsLists.remove(list);
+	}
+	
 }

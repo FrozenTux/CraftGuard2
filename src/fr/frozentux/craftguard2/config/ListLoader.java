@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.list.Id;
@@ -78,7 +79,8 @@ public class ListLoader {
 		while(it.hasNext()){	//This loop will be run for each list
 			String name = it.next();
 			String permission = configuration.getString(name + ".permission");
-			String parent = configuration.getString(name + ".parent");
+			String parentName = configuration.getString(name + ".parent");
+			List parent = groupsLists.get(parentName);
 			groupsLists.put(name, new List(name, permission, configuration.getStringList(name + ".list"), parent, plugin.getListManager()));
 		}
 		
@@ -93,7 +95,8 @@ public class ListLoader {
 		configurationFile.delete();
 		try{
 			configurationFile.createNewFile();
-			configuration.load(configurationFile);
+			configuration = new YamlConfiguration();
+			System.out.println(configuration.contains("empty"));
 		}catch (Exception e){
 			e.printStackTrace();
 		}

@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
+import fr.frozentux.craftguard2.commands.CgCommandExecutor;
 import fr.frozentux.craftguard2.config.*;
 import fr.frozentux.craftguard2.list.*;
 import fr.frozentux.craftguard2.listener.*;
@@ -66,12 +67,14 @@ public class CraftGuardPlugin extends JavaPlugin {
 		smeltFile = new SmeltFile(new YamlConfiguration(), new File(this.getDataFolder().getAbsolutePath() + File.separator + "smelting.yml"), this);
 		smeltFile.load();
 		
+		//Commands init
+		this.getCommand("cg").setExecutor(new CgCommandExecutor(this));
+		
 		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been enabled");
 	}
 	
 	public void onDisable(){
 		config.write();
-		listLoader.writeLists(listManager);
 		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been disabled");
 	}
 	

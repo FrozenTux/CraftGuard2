@@ -51,11 +51,12 @@ public class List {
 		this.manager = manager;
 	}
 	
-	public List(String name, String permission,  java.util.List<String> ids, String parent, ListManager manager){
+	public List(String name, String permission,  java.util.List<String> ids, List parent, ListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
-		this.parent = manager.getList(parent);
+		this.parent = parent;
 		this.ids = new HashMap<Integer, Id>();
+		this.manager = manager;
 		
 		Iterator<String> it = ids.iterator();
 		while(it.hasNext()){
