@@ -26,6 +26,11 @@ public class ListManager {
 	public void init(){
 		checkList = new ArrayList<Integer>();
 		groupsLists = loader.load();
+		
+		Iterator<List> it = groupsLists.values().iterator();
+		while(it.hasNext()){
+			it.next().registerParent();
+		}
 	}
 	
 	public List getList(String name){

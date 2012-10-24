@@ -13,7 +13,7 @@ import org.bukkit.Material;
  */
 public class List {
 	
-	private String name, permission;
+	private String name, permission, parentName;
 	private List parent;
 	private ListManager manager;
 	
@@ -51,10 +51,11 @@ public class List {
 		this.manager = manager;
 	}
 	
-	public List(String name, String permission,  java.util.List<String> ids, List parent, ListManager manager){
+	public List(String name, String permission,  java.util.List<String> ids, String parent, ListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
-		this.parent = parent;
+		this.parentName = parent;
+		this.parent = null;
 		this.ids = new HashMap<Integer, Id>();
 		this.manager = manager;
 		
@@ -164,5 +165,9 @@ public class List {
 		}
 		
 		return result;
+	}
+	
+	public void registerParent(){
+		parent = manager.getList(parentName);
 	}
 }

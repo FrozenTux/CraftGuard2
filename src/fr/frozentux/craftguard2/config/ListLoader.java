@@ -80,8 +80,7 @@ public class ListLoader {
 			String name = it.next();
 			String permission = configuration.getString(name + ".permission");
 			String parentName = configuration.getString(name + ".parent");
-			List parent = groupsLists.get(parentName);
-			groupsLists.put(name, new List(name, permission, configuration.getStringList(name + ".list"), parent, plugin.getListManager()));
+			groupsLists.put(name, new List(name, permission, configuration.getStringList(name + ".list"), parentName, plugin.getListManager()));
 		}
 		
 		plugin.getCraftGuardLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
