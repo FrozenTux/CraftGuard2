@@ -39,6 +39,7 @@ public class CraftGuard1ConfigConverter {
 		this.config = new YamlConfiguration();
 		this.list = new YamlConfiguration();
 		try {
+			this.listFile.createNewFile();
 			list.load(listFile);
 			config.load(configFile);
 		} catch (Exception e) {
@@ -57,7 +58,7 @@ public class CraftGuard1ConfigConverter {
 		
 		while(listIt.hasNext()){
 			String name = listIt.next();
-			String permission = config.getString("craftguard." + name + ".permision");
+			String permission = config.getString("craftguard." + name + ".permission");
 			String parent = config.getString("craftguard." + name + ".inheritance");
 			List<String> rawList = config.getStringList("craftguard." + name + ".granted");
 			
@@ -76,7 +77,10 @@ public class CraftGuard1ConfigConverter {
 		}
 		
 		configFile.delete();
+		
 		try {
+			configFile.createNewFile();
+			config = new YamlConfiguration();
 			config.load(configFile);
 		} catch (Exception e1) {
 			e1.printStackTrace();

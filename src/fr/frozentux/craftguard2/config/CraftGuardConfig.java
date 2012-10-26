@@ -28,7 +28,7 @@ public class CraftGuardConfig {
 	private HashMap<String, Object> fields;
 	
 	private String[] defaultKeys = {"checkfurnaces", "preventiveallow", "denymessage", "log", "logmessage", "baseperm", "debug", "notifyplayer"};
-	private Object[] defaultValues = {true, true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "basePerm", false, true};
+	private Object[] defaultValues = {true, true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "craftguard", false, true};
 	
 	/**
 	 * Loads, writes and stores configuration options for CraftGuard
@@ -55,6 +55,12 @@ public class CraftGuardConfig {
 		if(file.isSet("craftguard")){	//Old configuration type, needs to be converted
 			plugin.getCraftGuardLogger().info("Old configuration format has been detected ! Your file will be converted.");
 			new CraftGuard1ConfigConverter(plugin).convert();
+			file = new YamlConfiguration();
+			try {
+				file.load(configFile);
+			} catch (Exception e) {
+				
+			}
 		}
 		
 		for(int i = 0 ; i<defaultKeys.length ; i++){
