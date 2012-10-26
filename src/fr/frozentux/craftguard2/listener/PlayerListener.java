@@ -35,7 +35,11 @@ public class PlayerListener implements Listener {
 			int id = object.getTypeId();
 			byte metadata = object.getData().getData();
 			
-			e.setCancelled(!CraftPermissionChecker.checkCraft(player, id, metadata, plugin));
+			boolean allowed = !CraftPermissionChecker.checkCraft(player, id, metadata, plugin);
+			if(allowed){
+				e.setCancelled(allowed);
+				if(allowed)player.updateInventory();
+			}
 			return;
 			
 		}
@@ -55,10 +59,10 @@ public class PlayerListener implements Listener {
 			byte metadata = object.getData().getData();
 			
 			boolean allowed = !CraftPermissionChecker.checkFurnace(player, id, metadata, plugin);
-			plugin.getCraftGuardLogger().debug(String.valueOf(allowed));
-			if(allowed)e.setCancelled(allowed);
-			
-			if(allowed)player.updateInventory();
+			if(allowed){
+				e.setCancelled(allowed);
+				if(allowed)player.updateInventory();
+			}
 			
 		}
 		
