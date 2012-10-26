@@ -108,7 +108,10 @@ public class List {
 	 * @return	The id object corresponding to the given id if the list contains it; null otherwise
 	 */
 	public Id getId(int id){
-		if(parent != null && parent.containsId(id))return ids.get(id).merge(parent.getId(id));
+		if(parent != null && parent.containsId(id)){
+			if(ids.containsKey(id))return ids.get(id).merge(parent.getId(id));
+			else return parent.getId(id);
+		}
 		else return ids.get(id);
 	}
 	
