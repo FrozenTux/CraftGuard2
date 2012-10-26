@@ -46,6 +46,8 @@ public class CraftGuardConfig {
 	 * Loads the configuration from the config file, erasing values in memory
 	 */
 	public void load(){
+		fields = new HashMap<String, Object>();
+		
 		try {
 			file.load(configFile);
 		} catch (Exception e) {
@@ -64,13 +66,12 @@ public class CraftGuardConfig {
 		}
 		
 		for(int i = 0 ; i<defaultKeys.length ; i++){
-			file.addDefault(defaultKeys[i], defaultValues[i]);
+			fields.put(defaultKeys[i], defaultValues[i]);
 		}
 		
 		if(!file.isSet("log")){
 			plugin.getCraftGuardLogger().info("Configuration file not detected ! Writing defaults...");
-			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard\n\nIf you erase some values by error remove log line and missing default values will be rewritten !").copyHeader();
-			file.options().copyDefaults(true);
+			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard").copyHeader();
 			try {
 				file.save(configFile);
 			} catch (IOException e) {
@@ -111,8 +112,6 @@ public class CraftGuardConfig {
 	 */
 	public Object getKey(String key){
 		Object value = fields.get(key);
-		List<String> defaultList = Arrays.asList(defaultKeys);
-		if(value == null && defaultList.contains(key))value = Arrays.asList(defaultValues).get(defaultList.indexOf(key));
 		return value;
 	}
 	
