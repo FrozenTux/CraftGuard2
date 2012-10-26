@@ -78,8 +78,6 @@ public class CraftGuardConfig {
 			String key = it.next();
 			fields.put(key, file.get(key));
 		}
-		
-		plugin.getCraftGuardLogger().info("Configuration loaded !");
 	}
 	
 	/**
@@ -98,7 +96,6 @@ public class CraftGuardConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		plugin.getCraftGuardLogger().info("Configuration saved !");
 	}
 	
 	/**
