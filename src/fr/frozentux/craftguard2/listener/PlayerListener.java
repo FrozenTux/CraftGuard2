@@ -39,7 +39,7 @@ public class PlayerListener implements Listener {
 			
 		}
 		
-		if(!plugin.getConfiguration().getBooleanKey("checkFurnaces"))return;
+		if(!plugin.getConfiguration().getBooleanKey("checkfurnaces"))return;
 		
 		if(invType.equals(InventoryType.FURNACE) && (slotType == SlotType.CONTAINER || slotType == SlotType.FUEL || slotType == SlotType.QUICKBAR) && (e.isShiftClick() || e.getSlot() == 0 || e.getSlot() == 1)){
 			ItemStack object;
