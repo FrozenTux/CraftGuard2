@@ -14,8 +14,8 @@ public class SmeltFile {
 	private FileConfiguration file;
 	private File smeltingFile;
 	
-	private int[] baseSmelting = {5, 319, 363, 365, 349, 15,  14,  56,  21,  73,  16,  12, 4, 337, 17,  81};
-	private int[] baseResult =  {1, 320, 364, 366, 350, 265, 266, 264, 351, 331, 263, 20, 1, 336, 263, 351};
+	private int[] baseSmelting = {319, 363, 365, 349, 15,  14,  56,  21,  73,  16,  12, 4, 337, 17,  81};
+	private int[] baseResult =  {320, 364, 366, 350, 265, 266, 264, 351, 331, 263, 20, 1, 336, 263, 351};
 	
 	public SmeltFile(FileConfiguration file, File smeltFile, CraftGuardPlugin plugin){
 		this.file = file;
