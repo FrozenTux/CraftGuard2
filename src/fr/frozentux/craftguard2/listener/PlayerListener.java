@@ -30,7 +30,7 @@ public class PlayerListener implements Listener {
 		int slot = e.getSlot();
 		Player player = (Player)e.getWhoClicked();
 		
-		if(slotType == SlotType.RESULT && (invType.equals(InventoryType.CRAFTING) || invType.equals(InventoryType.CRAFTING)) && slot == 0 && e.getInventory().getItem(0) != null){
+		if(slotType == SlotType.RESULT && (invType.equals(InventoryType.CRAFTING) || invType.equals(InventoryType.WORKBENCH)) && slot == 0 && e.getInventory().getItem(0) != null){
 			ItemStack object = e.getInventory().getItem(slot);
 			int id = object.getTypeId();
 			byte metadata = object.getData().getData();
