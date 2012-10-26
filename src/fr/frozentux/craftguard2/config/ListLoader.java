@@ -68,6 +68,7 @@ public class ListLoader {
 		
 		//Load the file
 		try {
+			configuration = new YamlConfiguration();
 			configuration.load(configurationFile);
 		} catch (Exception e) {
 			e.printStackTrace();
