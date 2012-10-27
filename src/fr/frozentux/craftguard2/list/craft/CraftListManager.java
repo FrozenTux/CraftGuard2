@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.list;
+package fr.frozentux.craftguard2.list.craft;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,19 +6,18 @@ import java.util.Iterator;
 import java.util.Set;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
-import fr.frozentux.craftguard2.config.ListLoader;
 
-public class ListManager {
+public class CraftListManager {
 	
 	private CraftGuardPlugin plugin;
 	
-	private HashMap<String, List> groupsLists;
+	private HashMap<String, CraftList> groupsLists;
 	
 	private ArrayList<Integer> checkList;
 	
-	private ListLoader loader;
+	private CraftListLoader loader;
 	
-	public ListManager(CraftGuardPlugin plugin, ListLoader loader){
+	public CraftListManager(CraftGuardPlugin plugin, CraftListLoader loader){
 		this.plugin = plugin;
 		this.loader = loader;
 	}
@@ -27,24 +26,24 @@ public class ListManager {
 		checkList = new ArrayList<Integer>();
 		groupsLists = loader.load();
 		
-		Iterator<List> it = groupsLists.values().iterator();
+		Iterator<CraftList> it = groupsLists.values().iterator();
 		while(it.hasNext()){
 			it.next().registerParent();
 		}
 	}
 	
-	public List getList(String name){
+	public CraftList getList(String name){
 		return groupsLists.get(name);
 	}
 	
-	public void addList(List list, boolean replaceIfExisting){
-		if(!groupsLists.containsKey(list.getName()) || replaceIfExisting){
-			Iterator<Integer> it = list.getIds(false).keySet().iterator();
+	public void addList(CraftList craftList, boolean replaceIfExisting){
+		if(!groupsLists.containsKey(craftList.getName()) || replaceIfExisting){
+			Iterator<Integer> it = craftList.getIds(false).keySet().iterator();
 			while(it.hasNext()){
 				int id = it.next();
 				if(!checkList.contains(id))checkList.add(id);
 			}
-			groupsLists.put(list.getName(), list);
+			groupsLists.put(craftList.getName(), craftList);
 		}
 	}
 	
@@ -60,8 +59,8 @@ public class ListManager {
 		return groupsLists.keySet();
 	}
 	
-	public void saveList(List list){
-		loader.writeList(list, true);
+	public void saveList(CraftList craftList){
+		loader.writeList(craftList, true);
 	}
 	
 	public void saveLists(){

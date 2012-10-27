@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
-import fr.frozentux.craftguard2.list.List;
+import fr.frozentux.craftguard2.list.craft.CraftList;
 
 public class CgAddListCommand extends CgCommandComponent {
 	
@@ -20,7 +20,7 @@ public class CgAddListCommand extends CgCommandComponent {
 			return false;
 		}
 		
-		plugin.getListManager().addList(new List(args[0], null, null, plugin.getListManager()), false);
+		plugin.getListManager().addList(new CraftList(args[0], null, null, plugin.getListManager()), false);
 		plugin.getListManager().saveList(plugin.getListManager().getList(args[0]));
 		
 		sender.sendMessage(ChatColor.GREEN + "List " + args[0] + " has been created !");

@@ -7,8 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
-import fr.frozentux.craftguard2.list.List;
-import fr.frozentux.craftguard2.list.ListManager;
+import fr.frozentux.craftguard2.list.craft.CraftListManager;
+import fr.frozentux.craftguard2.list.craft.CraftList;
 import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
 
 /**
@@ -19,7 +19,7 @@ import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
 public class CraftPermissionChecker {
 	
 	public static boolean checkCraft(Player player, int id, byte data, CraftGuardPlugin plugin){
-		ListManager manager = plugin.getListManager();
+		CraftListManager manager = plugin.getListManager();
 		
 		boolean allowed = false;
 		if(manager.inCheckList(id)){
@@ -27,10 +27,10 @@ public class CraftPermissionChecker {
 			Iterator<String> it = manager.getListsNames().iterator();
 			while(it.hasNext() && !allowed){
 				
-				List list = manager.getList(it.next());
+				CraftList craftList = manager.getList(it.next());
 				
-				if(player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + "." + list.getPermission()) && list.containsId(id)){
-					allowed = list.getId(id).hasMetadata(data);
+				if(player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + "." + craftList.getPermission()) && craftList.containsId(id)){
+					allowed = craftList.getId(id).hasMetadata(data);
 				}
 			}
 			

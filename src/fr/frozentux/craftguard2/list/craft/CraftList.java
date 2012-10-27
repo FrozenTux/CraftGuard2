@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.list;
+package fr.frozentux.craftguard2.list.craft;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,16 +6,18 @@ import java.util.Iterator;
 
 import org.bukkit.Material;
 
+import fr.frozentux.craftguard2.list.Id;
+
 /**
  * Data structure that reprensents a CraftGuard list/group
  * @author FrozenTux
  *
  */
-public class List {
+public class CraftList {
 	
 	private String name, permission, parentName;
-	private List parent;
-	private ListManager manager;
+	private CraftList parent;
+	private CraftListManager manager;
 	
 	private HashMap<Integer, Id> ids;
 	
@@ -25,9 +27,9 @@ public class List {
 	 * @param name			The name of the list
 	 * @param permission	The permission of the list
 	 * @param parent		The parent list (may be null if no parent)
-	 * @param manager		The {@link ListManager} storing this list
+	 * @param manager		The {@link CraftListManager} storing this list
 	 */
-	public List(String name, String permission, String parent, ListManager manager){
+	public CraftList(String name, String permission, String parent, CraftListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
 		this.parent = manager.getList(parent);
@@ -41,9 +43,9 @@ public class List {
 	 * @param permission	The permission of the list
 	 * @param ids			The Hashmap containing the ids and data values
 	 * @param parent		The parent list (may be null if no parent)
-	 * @param manager		The {@link ListManager} storing this list
+	 * @param manager		The {@link CraftListManager} storing this list
 	 */
-	public List(String name, String permission,  HashMap<Integer, Id> ids, String parent, ListManager manager){
+	public CraftList(String name, String permission,  HashMap<Integer, Id> ids, String parent, CraftListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
 		this.parent = manager.getList(parent);
@@ -51,7 +53,7 @@ public class List {
 		this.manager = manager;
 	}
 	
-	public List(String name, String permission,  java.util.List<String> ids, String parent, ListManager manager){
+	public CraftList(String name, String permission,  java.util.List<String> ids, String parent, CraftListManager manager){
 		this.name = name;
 		this.permission = (permission == null) ? name : permission;
 		this.parentName = parent;
@@ -143,7 +145,7 @@ public class List {
 		return permission;
 	}
 	
-	public List getParent(){
+	public CraftList getParent(){
 		return parent;
 	}
 	

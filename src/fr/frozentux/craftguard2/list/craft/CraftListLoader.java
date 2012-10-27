@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.config;
+package fr.frozentux.craftguard2.list.craft;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,15 +12,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.list.Id;
-import fr.frozentux.craftguard2.list.List;
-import fr.frozentux.craftguard2.list.ListManager;
 
 /**
  * Loads, writes and stores groups lists for CraftGuard
  * @author FrozenTux
  *
  */
-public class ListLoader {
+public class CraftListLoader {
 	
 	private CraftGuardPlugin plugin;
 	
@@ -32,7 +30,7 @@ public class ListLoader {
 	 * @author FrozenTux
 	 *
 	 */
-	public ListLoader(CraftGuardPlugin plugin, FileConfiguration fileConfiguration, File file){
+	public CraftListLoader(CraftGuardPlugin plugin, FileConfiguration fileConfiguration, File file){
 		this.plugin = plugin;
 		this.configurationFile = file;
 		this.configuration = fileConfiguration;
@@ -42,10 +40,10 @@ public class ListLoader {
 	 * Loads the list from the {@link FileConfiguration} specified in the constructor
 	 * @return A HashMap of the loaded groups
 	 */
-	public HashMap<String, List> load(){
+	public HashMap<String, CraftList> load(){
 		
 		//Initializing the groups list or clearing it
-		HashMap<String, List> groupsLists = new HashMap<String, List>();
+		HashMap<String, CraftList> groupsLists = new HashMap<String, CraftList>();
 		
 		//If the file doesn't exist, write defaults
 		if(!configurationFile.exists()){
@@ -54,7 +52,7 @@ public class ListLoader {
 			exampleMap.put(5, new Id(5));//PLANKS
 			exampleMap.put(35, new Id(35));
 			exampleMap.get(35).addMetadata(2);//Only purple WOOL
-			List exampleList = new List("example", "samplepermission", exampleMap, null, plugin.getListManager());
+			CraftList exampleList = new CraftList("example", "samplepermission", exampleMap, null, plugin.getListManager());
 			
 			configuration.addDefault(exampleList.getName() + ".list", exampleList.toStringList(false));
 			configuration.addDefault(exampleList.getName() + ".permission", exampleList.getPermission());
@@ -81,7 +79,7 @@ public class ListLoader {
 			String name = it.next();
 			String permission = configuration.getString(name + ".permission");
 			String parentName = configuration.getString(name + ".parent");
-			groupsLists.put(name, new List(name, permission, configuration.getStringList(name + ".list"), parentName, plugin.getListManager()));
+			groupsLists.put(name, new CraftList(name, permission, configuration.getStringList(name + ".list"), parentName, plugin.getListManager()));
 		}
 		
 		plugin.getCraftGuardLogger().info("Succesfully loaded " + groupsLists.size() + " lists");
@@ -89,7 +87,7 @@ public class ListLoader {
 		return groupsLists;
 	}
 	
-	public void writeAllLists(ListManager manager){
+	public void writeAllLists(CraftListManager manager){
 		plugin.getCraftGuardLogger().info("Saving " + manager.getListsNames().size() + " lists...");
 		
 		configurationFile.delete();
@@ -117,10 +115,10 @@ public class ListLoader {
 		
 	}
 	
-	public void writeList(List list, boolean save){
-		configuration.set(list.getName() + ".list", list.toStringList(false));
-		if(!list.getPermission().equals(list.getName()))configuration.set(list.getName() + ".permission", list.getPermission());
-		if(!(list.getParent() == null))configuration.set(list.getName() + ".parent", list.getParent().getName());
+	public void writeList(CraftList craftList, boolean save){
+		configuration.set(craftList.getName() + ".list", craftList.toStringList(false));
+		if(!craftList.getPermission().equals(craftList.getName()))configuration.set(craftList.getName() + ".permission", craftList.getPermission());
+		if(!(craftList.getParent() == null))configuration.set(craftList.getName() + ".parent", craftList.getParent().getName());
 		
 		if(save){
 			try {
