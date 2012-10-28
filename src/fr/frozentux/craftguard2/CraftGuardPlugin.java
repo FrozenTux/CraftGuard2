@@ -9,8 +9,9 @@ import org.mcstats.Metrics;
 
 import fr.frozentux.craftguard2.commands.CgCommandExecutor;
 import fr.frozentux.craftguard2.config.*;
+import fr.frozentux.craftguard2.list.ListLoader;
+import fr.frozentux.craftguard2.list.ListManager;
 import fr.frozentux.craftguard2.list.craft.CraftListLoader;
-import fr.frozentux.craftguard2.list.craft.CraftListManager;
 import fr.frozentux.craftguard2.listener.*;
 import fr.frozentux.craftguard2.logger.*;
 import fr.frozentux.craftguard2.smeltingmanager.*;
@@ -28,9 +29,12 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	private CraftGuardConfig config;
 	
+	private ListLoader listLoader;
+	private File listFile;
+	private ListManager listManager;
+	
+	private File craftFile;
 	private CraftListLoader craftListLoader;
-	private File craftListFile;
-	private CraftListManager craftListManager;
 	
 	private PlayerListener playerListener;
 	private CraftPermissionChecker permissionChecker;
@@ -55,10 +59,14 @@ public class CraftGuardPlugin extends JavaPlugin {
 		if(config.getBooleanKey("debug") == true)craftGuardLogger.enableDebug();
 		
 		//ListManager init
-		craftListFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "lists.yml");
-		craftListLoader = new CraftListLoader(this, new YamlConfiguration(), craftListFile);
-		craftListManager = new CraftListManager(this, craftListLoader);
-		craftListManager.init();
+		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "list.yml");
+		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
+		listManager = new ListManager(this, listLoader);
+		listManager.init();
+		
+		//Craft lists init
+		craftFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "craft.yml");
+		craftListLoader = new CraftListLoader(this, new YamlConfiguration(), craftFile);
 		
 		//Listener init
 		playerListener = new PlayerListener(this);
@@ -91,8 +99,8 @@ public class CraftGuardPlugin extends JavaPlugin {
 		return config;
 	}
 	
-	public CraftListManager getListManager(){
-		return craftListManager;
+	public ListManager getListManager(){
+		return listManager;
 	}
 	
 	public CraftPermissionChecker getPermissionChecker(){
