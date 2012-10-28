@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
-import fr.frozentux.craftguard2.list.craft.CraftListManager;
+import fr.frozentux.craftguard2.list.ListManager;
 import fr.frozentux.craftguard2.list.craft.CraftList;
 import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
 
@@ -19,7 +19,7 @@ import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
 public class CraftPermissionChecker {
 	
 	public static boolean checkCraft(Player player, int id, byte data, CraftGuardPlugin plugin){
-		CraftListManager manager = plugin.getListManager();
+		ListManager manager = plugin.getListManager();
 		
 		boolean allowed = false;
 		if(manager.inCheckList(id)){
