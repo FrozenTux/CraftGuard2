@@ -11,14 +11,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
+import fr.frozentux.craftguard2.list.ListManager;
 import fr.frozentux.craftguard2.list.Id;
+import fr.frozentux.craftguard2.list.TypeList;
+import fr.frozentux.craftguard2.list.TypeListLoader;
 
 /**
  * Loads, writes and stores groups lists for CraftGuard
  * @author FrozenTux
  *
  */
-public class CraftListLoader {
+public class CraftListLoader extends TypeListLoader{
 	
 	private CraftGuardPlugin plugin;
 	
@@ -40,10 +43,10 @@ public class CraftListLoader {
 	 * Loads the list from the {@link FileConfiguration} specified in the constructor
 	 * @return A HashMap of the loaded groups
 	 */
-	public HashMap<String, CraftList> load(){
+	public HashMap<String, TypeList> load(){
 		
 		//Initializing the groups list or clearing it
-		HashMap<String, CraftList> groupsLists = new HashMap<String, CraftList>();
+		HashMap<String, TypeList> groupsLists = new HashMap<String, TypeList>();
 		
 		//If the file doesn't exist, write defaults
 		if(!configurationFile.exists()){
@@ -87,7 +90,7 @@ public class CraftListLoader {
 		return groupsLists;
 	}
 	
-	public void writeAllLists(CraftListManager manager){
+	public void writeAllLists(ListManager manager){
 		plugin.getCraftGuardLogger().info("Saving " + manager.getListsNames().size() + " lists...");
 		
 		configurationFile.delete();
