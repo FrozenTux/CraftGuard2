@@ -11,13 +11,37 @@ import org.bukkit.Material;
  * @author FrozenTux
  *
  */
-public abstract class TypeList {
+public class TypeList {
 	
 	protected List list;
 	
-	protected static String type;
+	protected String type;
 	
 	protected HashMap<Integer, Id> ids;
+	
+	public TypeList(String type, List list){
+		this.ids = new HashMap<Integer, Id>();
+		this.list = list;
+		this.type = type;
+	}
+	
+	public TypeList(String type, List list, HashMap<Integer, Id> ids){
+		this.ids = ids;
+		this.list = list;
+		this.type = type;
+	}
+	
+	public TypeList(String type, List list, java.util.List<String> ids){
+		this.ids = new HashMap<Integer, Id>();
+		this.list = list;
+		
+		Iterator<String> it = ids.iterator();
+		while(it.hasNext()){
+			this.addId(new Id(it.next()));
+		}
+		
+		this.type = type;
+	}
 
 	/**
 	 * Tries to add an id to the list.
