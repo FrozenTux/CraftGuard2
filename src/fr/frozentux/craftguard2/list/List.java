@@ -118,4 +118,8 @@ public class List {
 	public ListManager getListManager(){
 		return manager;
 	}
+	
+	public void addTypeList(TypeList list){
+		typesLists.put(list.getType(), list);
+	}
 }
