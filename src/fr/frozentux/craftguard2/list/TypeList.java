@@ -116,7 +116,7 @@ public class TypeList {
 		
 		HashMap<Integer, Id> mergedMap = ids;
 		
-		if(containParents){
+		if(containParents && list.getParent() != null){
 			Iterator<Integer> it = list.getParent().getTypeList(getType()).getIds(true, true).keySet().iterator();
 			
 			while(it.hasNext()){
