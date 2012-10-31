@@ -77,6 +77,13 @@ public class List {
 	}
 	
 	/**
+	 * @return A {@link HashMap} containing all the common ids with the id as int as key and the {@link Id} object as value
+	 */
+	public HashMap<Integer, Id> getCommonIds(){
+		return commonIds;
+	}
+	
+	/**
 	 * @return The name of this list
 	 */
 	public String getName(){
