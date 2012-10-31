@@ -13,6 +13,8 @@ public class ListManager {
 	
 	private HashMap<String, List> lists;
 	
+	private HashMap<String, CheckList> checkLists;
+	
 	private ListLoader loader;
 	
 	public ListManager(CraftGuardPlugin plugin, ListLoader loader){
@@ -21,7 +23,6 @@ public class ListManager {
 	}
 	
 	public void init(){
-		checkList = new ArrayList<Integer>();
 		lists = loader.load();
 		
 		Iterator<List> it = lists.values().iterator();
@@ -36,21 +37,8 @@ public class ListManager {
 	
 	public void addList(List list, boolean replaceIfExisting){
 		if(!lists.containsKey(list.getName()) || replaceIfExisting){
-			Iterator<Integer> it = list.getIds(false).keySet().iterator();
-			while(it.hasNext()){
-				int id = it.next();
-				//TODO ADD to checkList. But we need a CheckList first
-			}
 			lists.put(list.getName(), list);
 		}
-	}
-	
-	public void addIdToCheckList(int id){
-		if(!checkList.contains(id))checkList.add(id);
-	}
-	
-	public boolean inCheckList(int id){
-		return checkList.contains(id);
 	}
 	
 	public Set<String> getListsNames(){
@@ -58,7 +46,7 @@ public class ListManager {
 	}
 	
 	public void saveList(List list){
-		loader.writeList(craftList, true);
+		loader.writeList(list, true);
 	}
 	
 	public void saveLists(){
@@ -67,6 +55,14 @@ public class ListManager {
 	
 	public void removeList(String list){
 		lists.remove(list);
+	}
+	
+	public void registerCheckList(String type, CheckList checkList){
+		checkLists.put(type, checkList);
+	}
+	
+	public CheckList getCheckList(String type){
+		return checkLists.get(type);
 	}
 	
 }
