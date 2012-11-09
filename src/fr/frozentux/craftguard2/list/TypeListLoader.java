@@ -2,6 +2,7 @@ package fr.frozentux.craftguard2.list;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,6 +26,10 @@ public class TypeListLoader {
 	protected File file;
 	protected FileConfiguration configuration;
 	
+	protected ArrayList<String> defaultList;
+	
+	protected String header;
+	
 	/**
 	 * @param type		The type of the typeList this loader will load
 	 * @param file		A File object pointing at the location where the configuration file is.
@@ -37,11 +42,42 @@ public class TypeListLoader {
 		this.configuration = new YamlConfiguration();
 		this.manager = module.getCraftGuard().getListManager();
 		this.module = module;
+		this.defaultList = new ArrayList<String>();
+		defaultList.add("5");
+		defaultList.add("35:4:6");
+		this.header = null;
+	}
+	
+	public TypeListLoader(String type, File file, CraftGuard2Module module, String header){
+		this.type = type;
+		this.file = file;
+		this.configuration = new YamlConfiguration();
+		this.manager = module.getCraftGuard().getListManager();
+		this.module = module;
+		this.defaultList = new ArrayList<String>();
+		defaultList.add("5");
+		defaultList.add("35:4:6");
+		this.header = header;
 	}
 
 	public void loadAllLists(){
+		if(!file.exists()){
+			try{
+				file.createNewFile();
+				String aRandomListName = "example";
+				if(!manager.getListsNames().contains("example")){
+					//Seems that the example list has been deleted, we have to find another one
+					//This code could crash if the main list file is existing but empty, but why the server admin woud do that ? ;)
+					aRandomListName = (String) manager.getListsNames().toArray()[0];
+				}
+				configuration.set(aRandomListName, defaultList);
+				saveLists();
+			}catch(Exception e){
+				return;
+			}
+		}
+		
 		try{
-			file.createNewFile();
 			configuration.load(file);
 		}catch(Exception e){
 			return;
@@ -94,6 +130,9 @@ public class TypeListLoader {
 	}
 	
 	private void saveLists(){
+		if(header != null){
+			configuration.options().header(header).copyHeader(true);
+		}
 		try {
 			configuration.save(file);
 		} catch (IOException e) {
