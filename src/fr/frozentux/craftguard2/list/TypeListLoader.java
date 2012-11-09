@@ -1,6 +1,7 @@
 package fr.frozentux.craftguard2.list;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,7 +28,7 @@ public class TypeListLoader {
 	/**
 	 * @param type		The type of the typeList this loader will load
 	 * @param file		A File object pointing at the location where the configuration file is.
-	 * 					It should point at <code>(CraftGuard Folder)/type.yml</code>
+	 * 					It should point at <code>(CraftGuard Folder)/(type).yml</code>
 	 * @param module	The module using this loader
 	 */
 	public TypeListLoader(String type, File file, CraftGuard2Module module){
@@ -73,6 +74,30 @@ public class TypeListLoader {
 			
 			TypeList typeList = (stringList == null) ? new TypeList(type, manager.getList(list)) : new TypeList(type, manager.getList(list), stringList);
 			manager.getList(list).addTypeList(typeList);
+		}
+	}
+	
+	public void writeAllLists(){
+		Iterator<String> it = manager.getListsNames().iterator();
+		
+		while(it.hasNext()){
+			writeList(manager.getList(it.next()), false);
+		}
+		saveLists();
+	}
+	
+	public void writeList(List list, boolean save){
+		TypeList typeList = list.getTypeList(type);
+		
+		configuration.set(list.getName(), typeList.toStringList(false, false));
+		if(save)saveLists();
+	}
+	
+	private void saveLists(){
+		try {
+			configuration.save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
