@@ -15,7 +15,7 @@ import fr.frozentux.craftguard2.logger.CraftGuardLogger;
  * @author FrozenTux
  *
  */
-public abstract class CraftGuard2Module extends JavaPlugin {
+public abstract class CraftGuard2Plugin extends JavaPlugin {
 	
 	protected String type;
 	

@@ -8,7 +8,7 @@ import java.util.Iterator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import fr.frozentux.craftguard2.api.CraftGuard2Module;
+import fr.frozentux.craftguard2.api.CraftGuard2Plugin;
 
 /**
  * Loader for a specific type of TypeList for a CraftGuard module
@@ -19,7 +19,7 @@ public class TypeListLoader {
 	
 	protected String type;
 	
-	protected CraftGuard2Module module;
+	protected CraftGuard2Plugin module;
 	
 	protected ListManager manager;
 	
@@ -36,7 +36,7 @@ public class TypeListLoader {
 	 * 					It should point at <code>(CraftGuard Folder)/(type).yml</code>
 	 * @param module	The module using this loader
 	 */
-	public TypeListLoader(String type, File file, CraftGuard2Module module){
+	public TypeListLoader(String type, File file, CraftGuard2Plugin module){
 		this.type = type;
 		this.file = file;
 		this.configuration = new YamlConfiguration();
@@ -48,7 +48,7 @@ public class TypeListLoader {
 		this.header = null;
 	}
 	
-	public TypeListLoader(String type, File file, CraftGuard2Module module, String header){
+	public TypeListLoader(String type, File file, CraftGuard2Plugin module, String header){
 		this.type = type;
 		this.file = file;
 		this.configuration = new YamlConfiguration();
