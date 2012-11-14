@@ -8,6 +8,7 @@ import java.util.Iterator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.api.CraftGuard2Plugin;
 
 /**
@@ -19,7 +20,7 @@ public class TypeListLoader {
 	
 	protected String type;
 	
-	protected CraftGuard2Plugin module;
+	protected CraftGuardPlugin plugin;
 	
 	protected ListManager manager;
 	
@@ -36,24 +37,24 @@ public class TypeListLoader {
 	 * 					It should point at <code>(CraftGuard Folder)/(type).yml</code>
 	 * @param module	The module using this loader
 	 */
-	public TypeListLoader(String type, File file, CraftGuard2Plugin module){
+	public TypeListLoader(String type, File file, CraftGuardPlugin plugin){
 		this.type = type;
 		this.file = file;
 		this.configuration = new YamlConfiguration();
-		this.manager = module.getCraftGuard().getListManager();
-		this.module = module;
+		this.manager = plugin.getCraftGuard().getListManager();
+		this.plugin = plugin;
 		this.defaultList = new ArrayList<String>();
 		defaultList.add("5");
 		defaultList.add("35:4:6");
 		this.header = null;
 	}
 	
-	public TypeListLoader(String type, File file, CraftGuard2Plugin module, String header){
+	public TypeListLoader(String type, File file, CraftGuardPlugin plugin, String header){
 		this.type = type;
 		this.file = file;
 		this.configuration = new YamlConfiguration();
-		this.manager = module.getCraftGuard().getListManager();
-		this.module = module;
+		this.manager = plugin.getCraftGuard().getListManager();
+		this.plugin = plugin;
 		this.defaultList = new ArrayList<String>();
 		defaultList.add("5");
 		defaultList.add("35:4:6");
