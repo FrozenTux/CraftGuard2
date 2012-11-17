@@ -1,7 +1,9 @@
 package fr.frozentux.craftguard2.list;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Data structure reprensenting a craftGuard List, with it's attributes, it's type lists and other stuff 
@@ -121,5 +123,14 @@ public class List {
 	
 	public void addTypeList(TypeList list){
 		typesLists.put(list.getType(), list);
+	}
+	
+	public Set<String> commonIdsToStringSet(){
+		HashSet<String> result = new HashSet<String>();
+		Iterator<Integer> it = this.getCommonIds().keySet().iterator();
+		while(it.hasNext()){
+			result.add(this.getCommonId(it.next()).toString());
+		}
+		return result;
 	}
 }
