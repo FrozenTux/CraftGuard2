@@ -7,12 +7,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import fr.frozentux.craftguard2.api.CraftGuard2Plugin;
-import fr.frozentux.craftguard2.commands.CgCommandExecutor;
+import fr.frozentux.craftguard2.commands.*;
 import fr.frozentux.craftguard2.config.*;
-import fr.frozentux.craftguard2.list.ListLoader;
-import fr.frozentux.craftguard2.list.ListManager;
-import fr.frozentux.craftguard2.list.craft.CraftListLoader;
+import fr.frozentux.craftguard2.list.*;
+import fr.frozentux.craftguard2.list.craft.*;
 import fr.frozentux.craftguard2.listener.*;
 import fr.frozentux.craftguard2.logger.*;
 import fr.frozentux.craftguard2.smeltingmanager.*;
@@ -22,7 +20,7 @@ import fr.frozentux.craftguard2.smeltingmanager.*;
  * @author FrozenTux
  *
  */
-public class CraftGuardPlugin extends CraftGuard2Plugin {
+public class CraftGuardPlugin extends JavaPlugin {
 	
 	private Metrics metrics;
 	
