@@ -1,6 +1,5 @@
 package fr.frozentux.craftguard2.list;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -38,6 +37,7 @@ public class ListManager {
 	public void addList(List list, boolean replaceIfExisting){
 		if(!lists.containsKey(list.getName()) || replaceIfExisting){
 			lists.put(list.getName(), list);
+			this.saveList(list);
 		}
 	}
 	
@@ -50,11 +50,12 @@ public class ListManager {
 	}
 	
 	public void saveLists(){
-		loader.writeAllLists(this);
+		loader.writeAllLists();
 	}
 	
 	public void removeList(String list){
 		lists.remove(list);
+		this.saveLists();
 	}
 	
 	public void registerCheckList(String type, CheckList checkList){
