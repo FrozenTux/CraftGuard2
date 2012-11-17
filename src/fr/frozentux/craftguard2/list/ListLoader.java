@@ -64,4 +64,31 @@ public class ListLoader {
 		
 		return lists;
 	}
+	
+	public void writeList(List list, boolean save){
+		String path = list.getName() + ".";
+		configuration.set(path + "commonids", list.commonIdsToStringSet());
+		if(!list.getPermission().equals(list.getName()))configuration.set(path + "permission", list.getPermission());
+		if(list.getParent() != null)configuration.set(path + "parent", list.getPermission());
+		
+		if(save)
+			try {
+				configuration.save(configurationFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	public void writeAllLists(){
+		Iterator<String> it = plugin.getListManager().getListsNames().iterator();
+		while(it.hasNext()){
+			this.writeList(plugin.getListManager().getList(it.next()), false);
+		}
+		try {
+			configuration.save(configurationFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
