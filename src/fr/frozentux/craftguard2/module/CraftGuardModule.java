@@ -12,7 +12,7 @@ import fr.frozentux.craftguard2.list.TypeListLoader;
  * @author FrozenTux
  *
  */
-public class CraftGuard2Module {
+public class CraftGuardModule {
 
 	protected Listener listener;
 	
@@ -22,11 +22,11 @@ public class CraftGuard2Module {
 	
 	protected CraftGuardPlugin plugin;
 	
-	public CraftGuard2Module(String type, Listener listener, CraftGuardPlugin plugin){
+	public CraftGuardModule(String type, Listener listener, CraftGuardPlugin plugin){
 		this.type = type.toLowerCase();
 		this.listener = listener;
 		File file = new File("plugins" + File.separator + "CraftGuard" + File.separator + type + ".yml");
-		this.loader = new TypeListLoader(type, file, this, "CraftGuard " + type + " file\nBy FrozenTux");
+		this.loader = new TypeListLoader(type, file, plugin.getListManager(), "CraftGuard " + type + " file\nBy FrozenTux");
 	}
 	
 	public String getType(){
@@ -39,6 +39,10 @@ public class CraftGuard2Module {
 	
 	public TypeListLoader getLoader(){
 		return loader;
+	}
+	
+	public CraftGuardPlugin getCraftguard(){
+		return plugin;
 	}
 	
 }
