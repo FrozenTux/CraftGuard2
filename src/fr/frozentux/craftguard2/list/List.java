@@ -13,7 +13,7 @@ public class List {
 	
 	private String name, permission, parentName;
 	private List parent;
-	private HashMap<Integer, Id> commonIds;
+	private HashMap<Integer, Id> ids;
 	private HashMap<String, TypeList> typesLists;
 	private ListManager manager;
 	
@@ -23,7 +23,7 @@ public class List {
 		this.permission = permission;
 		this.parentName = parent;
 		this.manager = manager;
-		this.commonIds = new HashMap<Integer, Id>();
+		this.ids = new HashMap<Integer, Id>();
 		this.typesLists = new HashMap<String, TypeList>();
 	}
 	
@@ -32,13 +32,13 @@ public class List {
 		this.permission = permission;
 		this.parentName = parent;
 		this.manager = manager;
-		this.commonIds = new HashMap<Integer, Id>();
+		this.ids = new HashMap<Integer, Id>();
 		this.typesLists = new HashMap<String, TypeList>();
 		
 		Iterator<String> it = list.iterator();
 		while(it.hasNext()){
 			Id id = new Id(it.next());
-			commonIds.put(id.getId(), id);
+			ids.put(id.getId(), id);
 		}
 	}
 	
@@ -56,8 +56,8 @@ public class List {
 	 * @param id	The id to check
 	 * @return		<code>true</code> if the id is contained
 	 */
-	public boolean containsCommonId(int id){
-		return commonIds.containsKey(id);
+	public boolean containsId(int id){
+		return ids.containsKey(id);
 	}
 	
 	/**
@@ -74,15 +74,15 @@ public class List {
 	 * @param id	The id of the {@link Id}
 	 * @return		The {@link Id} if exists; otherwise null
 	 */
-	public Id getCommonId(int id){
-		return commonIds.get(id);
+	public Id getId(int id){
+		return ids.get(id);
 	}
 	
 	/**
 	 * @return A {@link HashMap} containing all the common ids with the id as int as key and the {@link Id} object as value
 	 */
-	public HashMap<Integer, Id> getCommonIds(){
-		return commonIds;
+	public HashMap<Integer, Id> getIds(){
+		return ids;
 	}
 	
 	/**
@@ -125,11 +125,11 @@ public class List {
 		typesLists.put(list.getType(), list);
 	}
 	
-	public Set<String> commonIdsToStringSet(){
+	public Set<String> idsToStringSet(){
 		HashSet<String> result = new HashSet<String>();
-		Iterator<Integer> it = this.getCommonIds().keySet().iterator();
+		Iterator<Integer> it = this.getIds().keySet().iterator();
 		while(it.hasNext()){
-			result.add(this.getCommonId(it.next()).toString());
+			result.add(this.getId(it.next()).toString());
 		}
 		return result;
 	}
