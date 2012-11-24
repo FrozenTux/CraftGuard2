@@ -24,16 +24,20 @@ public class ListLoader {
 		this.configuration = fileConfiguration;
 	}
 	
+	/**
+	 * Loads every list from the file given to the object.
+	 * @return	A Map of the loaded Lists
+	 */
 	public HashMap<String, List> load(){
 		HashMap<String, List> lists = new HashMap<String, List>();
 		
 		if(!configurationFile.exists()){
 			configuration.set("example.permission", "permission");
-			ArrayList<String> commonIds = new ArrayList<String>();
-			commonIds.add("24");
-			commonIds.add("32:2");
-			configuration.set("example.commonids", commonIds);
-			configuration.options().header("CraftGuard 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard\n\nThis file stores only lists definition with their common ids, their permissions and their parents").copyHeader(true);
+			ArrayList<String> ids = new ArrayList<String>();
+			ids.add("24");
+			ids.add("32:2");
+			configuration.set("example.ids", ids);
+			configuration.options().header("CraftGuard 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard").copyHeader(true);
 			
 			try {
 				configuration.save(configurationFile);
@@ -51,23 +55,26 @@ public class ListLoader {
 		
 		Iterator<String> it = configuration.getKeys(false).iterator();
 		
+		int ignoredCount = 0;
+		
 		while(it.hasNext()){	//This loop will be run for each list
 			String name = it.next();
 			String permission = configuration.getString(name + ".permission");
 			String parentName = configuration.getString(name + ".parent");
-			java.util.List<String> commonIds = configuration.getStringList(name + "commonids");
-			if(commonIds != null)lists.put(name, new List(name, permission, parentName, commonIds, plugin.getListManager()));
-			else lists.put(name, new List(name, permission, parentName, plugin.getListManager()));
+			java.util.List<String> ids = configuration.getStringList(name + "ids");
+			if(ids != null)lists.put(name, new List(name, permission, parentName, ids, plugin.getListManager()));
+			else plugin.getCraftGuardLogger().warning("List " + name + " has no ids defined ! Ignoring it");
 		}
 		
-		plugin.getCraftGuardLogger().info("Succesfully loaded " + lists.size() + " lists");
+		if(ignoredCount == 0) plugin.getCraftGuardLogger().info("Succesfully loaded " + lists.size() + " lists");
+		else plugin.getCraftGuardLogger().info("Succesfully loaded " + (lists.size() - ignoredCount) + " lists out of " + lists.size() + " lists (" + ignoredCount + " ignored)");
 		
 		return lists;
 	}
 	
 	public void writeList(List list, boolean save){
 		String path = list.getName() + ".";
-		configuration.set(path + "commonids", list.commonIdsToStringSet());
+		configuration.set(path + "commonids", list.idsToStringSet());
 		if(!list.getPermission().equals(list.getName()))configuration.set(path + "permission", list.getPermission());
 		if(list.getParent() != null)configuration.set(path + "parent", list.getPermission());
 		
