@@ -63,7 +63,10 @@ public class ListLoader {
 			String parentName = configuration.getString(name + ".parent");
 			java.util.List<String> ids = configuration.getStringList(name + "ids");
 			if(ids != null)lists.put(name, new List(name, permission, parentName, ids, plugin.getListManager()));
-			else plugin.getCraftGuardLogger().warning("List " + name + " has no ids defined ! Ignoring it");
+			else {
+				plugin.getCraftGuardLogger().warning("List " + name + " has no ids defined ! Ignoring it");
+				ignoredCount++;
+			}
 		}
 		
 		if(ignoredCount == 0) plugin.getCraftGuardLogger().info("Succesfully loaded " + lists.size() + " lists");
