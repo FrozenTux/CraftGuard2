@@ -73,6 +73,13 @@ public class CraftGuardLogger {
 		}
 	}
 	
+	public void warning(String message){
+		logger.log(Level.WARNING, message);
+		if(playerDebug){
+			debugToPlayer(message, "WARNING");
+		}
+	}
+	
 	private void debugToPlayer(String message, String level){
 		Player p = plugin.getServer().getPlayer(debugPlayerName);
 		if(p != null){
