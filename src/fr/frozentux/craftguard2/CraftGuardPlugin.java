@@ -10,7 +10,6 @@ import org.mcstats.Metrics;
 import fr.frozentux.craftguard2.commands.*;
 import fr.frozentux.craftguard2.config.*;
 import fr.frozentux.craftguard2.list.*;
-import fr.frozentux.craftguard2.listener.*;
 import fr.frozentux.craftguard2.logger.*;
 import fr.frozentux.craftguard2.smeltingmanager.*;
 
@@ -30,11 +29,6 @@ public class CraftGuardPlugin extends JavaPlugin {
 	private ListLoader listLoader;
 	private File listFile;
 	private ListManager listManager;
-	
-	private File craftFile;
-	
-	private PlayerListener playerListener;
-	private CraftPermissionChecker permissionChecker;
 	
 	private SmeltFile smeltFile;
 	
@@ -60,10 +54,6 @@ public class CraftGuardPlugin extends JavaPlugin {
 		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
 		listManager = new ListManager(this, listLoader);
 		listManager.init();
-		
-		//Listener init
-		playerListener = new PlayerListener(this);
-		this.getServer().getPluginManager().registerEvents(playerListener, this);
 		
 		//Smelting init
 		smeltFile = new SmeltFile(new YamlConfiguration(), new File(this.getDataFolder().getAbsolutePath() + File.separator + "smelting.yml"), this);
@@ -98,10 +88,6 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	public ListManager getListManager(){
 		return listManager;
-	}
-	
-	public CraftPermissionChecker getPermissionChecker(){
-		return permissionChecker;
 	}
 	
 	public SmeltFile getSmeltFile(){
