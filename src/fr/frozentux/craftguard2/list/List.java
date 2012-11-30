@@ -14,7 +14,7 @@ public class List {
 	private String name, permission, parentName;
 	private List parent;
 	private HashMap<Integer, Id> ids;
-	private HashMap<String, TypeList> typesLists;
+	private HashMap<String, HashMap<Integer, Id>> typesLists;
 	private ListManager manager;
 	
 	
@@ -24,7 +24,7 @@ public class List {
 		this.parentName = parent;
 		this.manager = manager;
 		this.ids = new HashMap<Integer, Id>();
-		this.typesLists = new HashMap<String, TypeList>();
+		this.typesLists = new HashMap<String, HashMap<Integer, Id>>();
 	}
 	
 	public List(String name, String permission, String parent, java.util.List<String> list, ListManager manager){
@@ -33,7 +33,7 @@ public class List {
 		this.parentName = parent;
 		this.manager = manager;
 		this.ids = new HashMap<Integer, Id>();
-		this.typesLists = new HashMap<String, TypeList>();
+		this.typesLists = new HashMap<String, HashMap<Integer, Id>>();
 		
 		Iterator<String> it = list.iterator();
 		while(it.hasNext()){
@@ -65,7 +65,7 @@ public class List {
 	 * @param type	The type
 	 * @return		The {@link TypeList} if it exists; otherwise <code>null</code>
 	 */
-	public TypeList getTypeList(String type){
+	public HashMap<Integer, Id> getTypeList(String type){
 		return typesLists.get(type);
 	}
 	
@@ -121,8 +121,8 @@ public class List {
 		return manager;
 	}
 	
-	public void addTypeList(TypeList list){
-		typesLists.put(list.getType(), list);
+	public void addTypeList(String type, HashMap<Integer, Id> list){
+		typesLists.put(type, list);
 	}
 	
 	public Set<String> idsToStringSet(){
