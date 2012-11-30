@@ -2,6 +2,9 @@ package fr.frozentux.craftguard2;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,7 +13,9 @@ import org.mcstats.Metrics;
 import fr.frozentux.craftguard2.commands.*;
 import fr.frozentux.craftguard2.config.*;
 import fr.frozentux.craftguard2.list.*;
+import fr.frozentux.craftguard2.listener.PlayerListener;
 import fr.frozentux.craftguard2.logger.*;
+import fr.frozentux.craftguard2.module.CraftGuardModule;
 import fr.frozentux.craftguard2.smeltingmanager.*;
 
 /**
@@ -22,7 +27,9 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	private Metrics metrics;
 	
-	private CraftGuardLogger craftGuardLogger; 
+	private CraftGuardLogger craftGuardLogger;
+	
+	private ModuleRegistry registry;
 	
 	private CraftGuardConfig config;
 	
@@ -32,7 +39,12 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	private SmeltFile smeltFile;
 	
+	public void onLoad(){
+		registry = new ModuleRegistry(this);
+	}
+	
 	public void onEnable(){
+		
 		//Logger init
 		craftGuardLogger = new CraftGuardLogger(this);
 		
@@ -44,10 +56,8 @@ public class CraftGuardPlugin extends JavaPlugin {
 			e.printStackTrace();
 		}
 		
-		//Configuration init
-		config = new CraftGuardConfig(this);
-		config.load();
-		if(config.getBooleanKey("debug") == true)craftGuardLogger.enableDebug();
+		initConfig();
+		initModules();
 		
 		//ListManager init
 		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "list.yml");
@@ -68,6 +78,40 @@ public class CraftGuardPlugin extends JavaPlugin {
 	public void onDisable(){
 		config.write();
 		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been disabled");
+	}
+	
+	/*
+	 * Private init methods
+	 */
+	private void initConfig(){
+		config = new CraftGuardConfig(this);
+		config.load();
+		if(config.getBooleanKey("debug") == true)craftGuardLogger.enableDebug();
+	}
+	
+	private void initModules(){
+		//STEP 1 : Adding all the modules to the registry
+		registry.add(new CraftGuardModule("craft", new PlayerListener(this), this));
+		
+		//STEP 2 : Selecting the modules to enable, and enable them
+		@SuppressWarnings("unchecked")
+		List<String> toEnable = (List<String>) config.getKey("modules");
+		HashSet<CraftGuardModule> enabled = new HashSet<CraftGuardModule>();
+		
+		for(String element : toEnable){
+			if(!registry.containsModule(element)){
+				toEnable.remove(element);
+				craftGuardLogger.warning("Module " + element + " does not exist ! Ignoring it...");
+			}else{
+				CraftGuardModule module = registry.getModule(element);
+				this.getServer().getPluginManager().registerEvents(module.getListener(), this);
+				enabled.add(module);
+			}
+		}
+	}
+	
+	private void initLists(){
+		
 	}
 	
 	
@@ -92,6 +136,10 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	public SmeltFile getSmeltFile(){
 		return smeltFile;
+	}
+	
+	public ModuleRegistry getModuleRegistry(){
+		return registry;
 	}
 	
 }
