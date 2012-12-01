@@ -143,4 +143,12 @@ public class List {
 		}
 		return result;
 	}
+	
+	public boolean hasTypeLists(){
+		return !typesLists.isEmpty();
+	}
+	
+	public Set<String> typeListsNames(){
+		return typesLists.keySet();
+	}
 }
