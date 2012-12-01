@@ -3,7 +3,6 @@ package fr.frozentux.craftguard2.list;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -89,9 +88,22 @@ public class ListLoader {
 	
 	public void writeList(List list, boolean save){
 		String path = list.getName() + ".";
-		configuration.set(path + "commonids", list.idsToStringSet());
 		if(!list.getPermission().equals(list.getName()))configuration.set(path + "permission", list.getPermission());
 		if(list.getParent() != null)configuration.set(path + "parent", list.getPermission());
+		configuration.set(path + "ids", list.idsToStringSet());
+		
+		if(list.hasTypeLists()){
+			Iterator<String> it = list.typeListsNames().iterator();
+			while(it.hasNext()){
+				String type = it.next();
+				Iterator<Id> idIterator = list.getTypeList(type).values().iterator();
+				ArrayList<String> rawList = new ArrayList<String>();
+				
+				while(idIterator.hasNext()) rawList.add(idIterator.next().toString());
+				
+				configuration.set(path + type, rawList);
+			}
+		}
 		
 		if(save)
 			try {
