@@ -3,8 +3,10 @@ package fr.frozentux.craftguard2.list;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -62,7 +64,17 @@ public class ListLoader {
 			String permission = configuration.getString(name + ".permission");
 			String parentName = configuration.getString(name + ".parent");
 			java.util.List<String> ids = configuration.getStringList(name + "ids");
-			if(ids != null)lists.put(name, new List(name, permission, parentName, ids, plugin.getListManager()));
+			if(ids != null){
+				lists.put(name, new List(name, permission, parentName, ids, plugin.getListManager()));
+				//Type lists loading
+				Set<String> customLists = configuration.getConfigurationSection(name).getKeys(false);
+				customLists.remove("ids");
+				Iterator<String> customListsIt = customLists.iterator();
+				while(customListsIt.hasNext()){
+					String element = customListsIt.next();
+					if(configuration.isList(name + "." + element)) lists.get(name).addTypeList(element, configuration.getStringList(name + "." + element));
+				}
+			}
 			else {
 				plugin.getCraftGuardLogger().warning("List " + name + " has no ids defined ! Ignoring it");
 				ignoredCount++;
