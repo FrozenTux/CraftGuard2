@@ -13,7 +13,7 @@ public class ListManager {
 	
 	private HashMap<String, List> lists;
 	
-	private HashMap<String, HashSet<Integer>> checkLists;
+	private HashMap<String, Set<Integer>> checkLists;
 	
 	private ListLoader loader;
 	
@@ -59,11 +59,11 @@ public class ListManager {
 		this.saveLists();
 	}
 	
-	public void registerCheckList(String type, HashSet<Integer> checkList){
+	public void registerCheckList(String type, Set<Integer> checkList){
 		checkLists.put(type, checkList);
 	}
 	
-	public HashSet<Integer> getCheckList(String type){
+	public Set<Integer> getCheckList(String type){
 		return checkLists.get(type);
 	}
 	
