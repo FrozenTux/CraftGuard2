@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.listener;
+package fr.frozentux.craftguard2.module.craft;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,11 +15,11 @@ import fr.frozentux.craftguard2.CraftGuardPlugin;
  * @author FrozenTux
  *
  */
-public class PlayerListener implements Listener {
+public class CraftListener implements Listener {
 	
 	private CraftGuardPlugin plugin;
 	
-	public PlayerListener(CraftGuardPlugin plugin){
+	public CraftListener(CraftGuardPlugin plugin){
 		this.plugin = plugin;
 	}
 	

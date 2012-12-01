@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.listener;
+package fr.frozentux.craftguard2.module.craft;
 
 import java.util.Iterator;
 

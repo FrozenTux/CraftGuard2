@@ -13,9 +13,9 @@ import org.mcstats.Metrics;
 import fr.frozentux.craftguard2.commands.*;
 import fr.frozentux.craftguard2.config.*;
 import fr.frozentux.craftguard2.list.*;
-import fr.frozentux.craftguard2.listener.PlayerListener;
 import fr.frozentux.craftguard2.logger.*;
 import fr.frozentux.craftguard2.module.CraftGuardModule;
+import fr.frozentux.craftguard2.module.craft.CraftListener;
 import fr.frozentux.craftguard2.smeltingmanager.*;
 
 /**
@@ -86,7 +86,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	private void initModules(){
 		//STEP 1 : Adding all the modules to the registry
-		registry.add(new CraftGuardModule("craft", new PlayerListener(this), this));
+		registry.add(new CraftGuardModule("craft", new CraftListener(this), this));
 		
 		//STEP 2 : Selecting the modules to enable, and enable them
 		@SuppressWarnings("unchecked")
