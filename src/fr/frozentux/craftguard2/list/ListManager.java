@@ -1,6 +1,7 @@
 package fr.frozentux.craftguard2.list;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ public class ListManager {
 	
 	private HashMap<String, List> lists;
 	
-	private HashMap<String, CheckList> checkLists;
+	private HashMap<String, HashSet<Integer>> checkLists;
 	
 	private ListLoader loader;
 	
@@ -58,11 +59,11 @@ public class ListManager {
 		this.saveLists();
 	}
 	
-	public void registerCheckList(String type, CheckList checkList){
+	public void registerCheckList(String type, HashSet<Integer> checkList){
 		checkLists.put(type, checkList);
 	}
 	
-	public CheckList getCheckList(String type){
+	public HashSet<Integer> getCheckList(String type){
 		return checkLists.get(type);
 	}
 	
