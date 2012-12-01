@@ -29,8 +29,8 @@ public class CraftGuardConfig {
 	
 	private static List<String> modules = Arrays.asList("craft", "use");
 	
-	private String[] defaultKeys = {"checkfurnaces", "preventiveallow", "denymessage", "log", "logmessage", "baseperm", "debug", "notifyplayer", "modules"};
-	private Object[] defaultValues = {true, true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "craftguard", false, true, modules};
+	private String[] defaultKeys = {"preventiveallow", "denymessage", "log", "logmessage", "baseperm", "debug", "notifyplayer", "modules"};
+	private Object[] defaultValues = {true, "You can't craft %n !", true, "%p tried to craft %n(%i) but has been denied", "craftguard", false, true, modules};
 	
 	/**
 	 * Loads, writes and stores configuration options for CraftGuard
