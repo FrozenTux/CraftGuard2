@@ -33,6 +33,7 @@ public class ModuleRegistry {
 	
 	public void add(CraftGuardModule module){
 		Validate.notNull(module, "The module to register can't be null");
+		if(module.getType().equals("default")) plugin.getCraftGuardLogger().warning("Trying to register a module named \"default\" which is forbidden !");
 		modules.put(module.getType(), module);
 	}
 	
