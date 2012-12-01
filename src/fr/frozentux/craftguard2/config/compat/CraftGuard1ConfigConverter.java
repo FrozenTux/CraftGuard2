@@ -1,13 +1,12 @@
 package fr.frozentux.craftguard2.config.compat;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -60,11 +59,10 @@ public class CraftGuard1ConfigConverter {
 			String name = listIt.next();
 			String permission = config.getString("craftguard." + name + ".permission");
 			String parent = config.getString("craftguard." + name + ".inheritance");
-			List<String> rawList = config.getStringList("craftguard." + name + ".granted");
 			
-			list.set(name + ".list", rawList);
 			if(permission != null)list.set(name + ".permission", permission);
 			if(parent != null)list.set(name + ".parent", parent);
+			list.set(name + ".ids", config.getStringList("craftguard." + name + ".granted"));
 			listCount++;
 		}
 		
@@ -75,6 +73,14 @@ public class CraftGuard1ConfigConverter {
 			String key = configIt.next();
 			fields.put(key, config.get(key));
 		}
+		
+		if(fields.containsKey("checkfurnaces") && (Boolean)fields.get("checkfurnaces")){
+			fields.remove("checkfurnaces");
+			fields.put("modules", Arrays.asList("craft", "smelt", "repair"));
+		}else{
+			fields.put("modules", Arrays.asList("craft"));
+		}
+		
 		
 		configFile.delete();
 		
@@ -94,15 +100,11 @@ public class CraftGuard1ConfigConverter {
 		}
 		
 		try {
+			config.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard\nAutomatically converted at" + Calendar.getInstance().getTime().toString()).copyHeader();
 			config.save(configFile);
+			list.save(listFile);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}
-		
-		try {
-			list.save(listFile);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
 		plugin.getCraftGuardLogger().info("Succesfully converted " + listCount + "lists into lists.yml !");
