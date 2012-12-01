@@ -58,12 +58,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 		
 		initConfig();
 		initModules();
-		
-		//ListManager init
-		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "list.yml");
-		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
-		listManager = new ListManager(this, listLoader);
-		listManager.init();
+		initLists();
 		
 		//Smelting init
 		smeltFile = new SmeltFile(new YamlConfiguration(), new File(this.getDataFolder().getAbsolutePath() + File.separator + "smelting.yml"), this);
@@ -111,7 +106,10 @@ public class CraftGuardPlugin extends JavaPlugin {
 	}
 	
 	private void initLists(){
-		
+		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "list.yml");
+		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
+		listManager = new ListManager(this, listLoader);
+		listManager.init();
 	}
 	
 	
