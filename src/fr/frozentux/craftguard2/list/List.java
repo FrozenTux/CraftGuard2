@@ -125,6 +125,16 @@ public class List {
 		typesLists.put(type, list);
 	}
 	
+	public void addTypeList(String type, java.util.List<String> list){
+		HashMap<Integer, Id> map = new HashMap<Integer, Id>();
+		Iterator<String> it = list.iterator();
+		while(it.hasNext()){
+			Id id = new Id(it.next());
+			map.put(id.getId(), id);
+		}
+		typesLists.put(type, map);
+	}
+	
 	public Set<String> idsToStringSet(){
 		HashSet<String> result = new HashSet<String>();
 		Iterator<Integer> it = this.getIds().keySet().iterator();
