@@ -1,4 +1,4 @@
-package fr.frozentux.craftguard2.module.craft;
+package fr.frozentux.craftguard2;
 
 import java.util.Iterator;
 
@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import fr.frozentux.craftguard2.CraftGuardPlugin;
 import fr.frozentux.craftguard2.list.ListManager;
 import fr.frozentux.craftguard2.list.craft.CraftList;
 import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
@@ -16,9 +15,9 @@ import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
  * @author FrozenTux
  *
  */
-public class CraftPermissionChecker {
+public class PermissionChecker {
 	
-	public static boolean checkCraft(Player player, int id, byte data, CraftGuardPlugin plugin){
+	public static boolean check(Player player, int id, byte data, CraftGuardPlugin plugin, String type){
 		ListManager manager = plugin.getListManager();
 		
 		boolean allowed = false;
@@ -42,12 +41,6 @@ public class CraftPermissionChecker {
 		}
 		
 		return allowed;
-	}
-	
-	public static boolean checkFurnace(Player player, int id, byte data, CraftGuardPlugin plugin){
-		id = SmeltReference.getReference().getSmelting(id);
-		
-		return checkCraft(player, id, data, plugin);
 	}
 	
 	private static String parseMessage(String message, Player player, int id){
