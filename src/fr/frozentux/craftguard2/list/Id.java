@@ -11,11 +11,19 @@ import java.util.Iterator;
 public class Id {
 	
 	private int id;
-	private boolean overrideAllMetadata;
+	private boolean overrideAllMetadata, remove;
 	private ArrayList<Integer> metadata;
 	
 	public Id(int id){
 		this.id = id;
+		this.remove = false;
+		this.metadata = new ArrayList<Integer>();
+		this.overrideAllMetadata = true;
+	}
+	
+	public Id(int id, boolean remove){
+		this.id = id;
+		this.remove = remove;
 		this.metadata = new ArrayList<Integer>();
 		this.overrideAllMetadata = true;
 	}
@@ -27,6 +35,14 @@ public class Id {
 	 */
 	public Id(int id, ArrayList<Integer> metadata){
 		this.id = id;
+		this.remove = false;
+		this.metadata = metadata;
+		this.overrideAllMetadata = false;
+	}
+	
+	public Id(int id, ArrayList<Integer> metadata, boolean remove){
+		this.id = id;
+		this.remove = remove;
 		this.metadata = metadata;
 		this.overrideAllMetadata = false;
 	}
@@ -36,6 +52,11 @@ public class Id {
 	 * @param raw	The raw Id under the form <code>id:metadata:metadata:[...]</code>
 	 */
 	public Id(String raw){
+		if(raw.startsWith("-")){
+			this.remove = true;
+			raw = raw.substring(1);
+		}else this.remove = false;
+		
 		this.id = Integer.valueOf(raw.split(":")[0]);
 		this.metadata = new ArrayList<Integer>();
 				
@@ -100,6 +121,7 @@ public class Id {
 	 */
 	public String toString(){
 		String result = String.valueOf(id);
+		if(isRemove())result = "-" + result;
 		if(!this.overrideAllMetadata){
 			Iterator<Integer> it = metadata.iterator();
 			while(it.hasNext()){
@@ -123,6 +145,10 @@ public class Id {
 		while(it.hasNext())merged.addMetadata(it.next());
 		
 		return merged;
+	}
+	
+	public boolean isRemove(){
+		return this.remove;
 	}
 	
 }
