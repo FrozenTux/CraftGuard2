@@ -29,6 +29,8 @@ public class ListManager {
 		while(it.hasNext()){
 			it.next().registerParent();
 		}
+		
+		generateCheckList();
 	}
 	
 	public List getList(String name){
@@ -77,7 +79,7 @@ public class ListManager {
 		HashSet<Integer> defaultCheckList = new HashSet<Integer>();
 		
 		while(listNames.hasNext()){
-			Iterator<Integer> idIterator = getList(listNames.next()).getIds().keySet().iterator();
+			Iterator<Integer> idIterator = getList(listNames.next()).getIds(false).keySet().iterator();
 			while(idIterator.hasNext())addToCheckList(idIterator.next());
 		}
 	}

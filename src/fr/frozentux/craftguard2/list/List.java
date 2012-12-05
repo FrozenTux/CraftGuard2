@@ -81,8 +81,17 @@ public class List {
 	/**
 	 * @return A {@link HashMap} containing all the common ids with the id as int as key and the {@link Id} object as value
 	 */
-	public HashMap<Integer, Id> getIds(){
-		return ids;
+	public HashMap<Integer, Id> getIds(boolean containParent){
+		if(!containParent || parent == null)return ids;
+		HashMap<Integer, Id> mergedMap = this.ids;
+		Iterator<Integer> parentIt = parent.getIds(true).keySet().iterator();
+		while(parentIt.hasNext()){
+			int id = parentIt.next();
+			if(!mergedMap.containsKey(id))mergedMap.put(id, parent.getId(id));
+			else mergedMap.put(id, mergedMap.get(id).merge(parent.getId(id)));
+		}
+		
+		return mergedMap;
 	}
 	
 	/**
@@ -137,7 +146,7 @@ public class List {
 	
 	public Set<String> idsToStringSet(){
 		HashSet<String> result = new HashSet<String>();
-		Iterator<Integer> it = this.getIds().keySet().iterator();
+		Iterator<Integer> it = this.getIds(false).keySet().iterator();
 		while(it.hasNext()){
 			result.add(this.getId(it.next()).toString());
 		}
