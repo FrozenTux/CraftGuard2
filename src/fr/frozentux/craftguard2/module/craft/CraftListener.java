@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.ItemStack;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
+import fr.frozentux.craftguard2.PermissionChecker;
 
 /**
  * Listener for all players-related actions including login and inventory click
@@ -35,7 +36,7 @@ public class CraftListener implements Listener {
 			int id = object.getTypeId();
 			byte metadata = object.getData().getData();
 			
-			boolean allowed = !CraftPermissionChecker.checkCraft(player, id, metadata, plugin);
+			boolean allowed = !PermissionChecker.check(player, id, metadata, plugin, "craft");
 			if(allowed){
 				e.setCancelled(allowed);
 				if(allowed)player.updateInventory();
@@ -43,29 +44,6 @@ public class CraftListener implements Listener {
 			return;
 			
 		}
-		
-		if(!plugin.getConfiguration().getBooleanKey("checkfurnaces"))return;
-		
-		if(invType.equals(InventoryType.FURNACE) && (slotType == SlotType.CONTAINER || slotType == SlotType.FUEL || slotType == SlotType.QUICKBAR) && (e.isShiftClick() || e.getSlot() == 0 || e.getSlot() == 1)){
-			ItemStack object;
-			if(e.isShiftClick())object = e.getCurrentItem();
-			else{
-				if(e.getSlot() == 0 && e.getCursor() != null)object = e.getCursor();
-				else if(e.getSlot() == 1 && e.getInventory().getItem(0) != null)object = e.getInventory().getItem(0);
-				else return;
-			}
-			
-			int id = object.getTypeId();
-			byte metadata = object.getData().getData();
-			
-			boolean allowed = !CraftPermissionChecker.checkFurnace(player, id, metadata, plugin);
-			if(allowed){
-				e.setCancelled(allowed);
-				if(allowed)player.updateInventory();
-			}
-			
-		}
-		
 		
 	}
 	
