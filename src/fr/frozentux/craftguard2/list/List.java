@@ -42,6 +42,11 @@ public class List {
 		}
 	}
 	
+	public void addId(Id id){
+		if(ids.containsKey(id.getId()))id = id.merge(ids.get(id.getId()));
+		ids.put(id.getId(), id);
+	}
+	
 	/**
 	 * Checks if the list has a {@link TypeList} for the given type
 	 * @param type	The type
