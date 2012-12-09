@@ -71,10 +71,10 @@ public class CraftGuard1ConfigConverter {
 		
 		while(configIt.hasNext()){
 			String key = configIt.next();
-			fields.put(key, config.get(key));
+			fields.put(key, config.get("config." + key));
 		}
 		
-		if(fields.containsKey("checkfurnaces") && (Boolean)fields.get("checkfurnaces")){
+		if(fields.containsKey("checkfurnaces") && Boolean.valueOf(String.valueOf(fields.get("checkfurnaces")))){
 			fields.remove("checkfurnaces");
 			fields.put("modules", Arrays.asList("craft", "smelt", "repair"));
 		}else{
