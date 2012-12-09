@@ -6,9 +6,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import fr.frozentux.craftguard2.list.List;
 import fr.frozentux.craftguard2.list.ListManager;
-import fr.frozentux.craftguard2.list.craft.CraftList;
-import fr.frozentux.craftguard2.smeltingmanager.SmeltReference;
 
 /**
  * Class which provides method to see if a player has permission to craft something
@@ -26,10 +25,14 @@ public class PermissionChecker {
 			Iterator<String> it = manager.getListsNames().iterator();
 			while(it.hasNext() && !allowed){
 				
-				CraftList craftList = manager.getList(it.next());
+				List list = manager.getList(it.next());
 				
-				if(player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + "." + craftList.getPermission()) && craftList.containsId(id)){
-					allowed = craftList.getId(id).hasMetadata(data);
+				if(player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + "." + list.getPermission()) && (list.containsId(id) || list.containsId(-id) || (list.typeListAvailable(type) && (list.getTypeList(type).containsKey(id) || list.getTypeList(type).containsKey(-id))))){
+					boolean listContains = (list.containsId(id)) ? list.getId(id).hasMetadata(data) : false;
+					boolean listContainsRem = (list.containsId(-id)) ? list.getId(-id).hasMetadata(data) : false;
+					boolean typeListContains = (list.typeListAvailable(type) && list.getTypeList(type).containsKey(id)) ? list.getTypeList(type).get(id).hasMetadata(data) : false;
+					boolean typeListContainsRem = (list.typeListAvailable(type) && list.getTypeList(type).containsKey(-id)) ? list.getTypeList(type).get(-id).hasMetadata(data) : false;
+					allowed = (listContains || typeListContains) && !listContainsRem && !typeListContainsRem;
 				}
 			}
 			
