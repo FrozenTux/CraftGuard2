@@ -20,7 +20,7 @@ public class CgListCommand extends CgCommandComponent {
 			return false;
 		}
 		
-		sender.sendMessage(ChatColor.AQUA + "List : " + plugin.getListManager().getList(args[0]).toString(true));
+		sender.sendMessage(ChatColor.AQUA + "List : " + plugin.getListManager().getList(args[0]).toString());
 		
 		return true;
 	}
