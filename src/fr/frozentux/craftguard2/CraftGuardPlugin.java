@@ -2,8 +2,8 @@ package fr.frozentux.craftguard2;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -91,10 +91,12 @@ public class CraftGuardPlugin extends JavaPlugin {
 		
 		//STEP 2 : Selecting the modules to enable, and enable them
 		@SuppressWarnings("unchecked")
-		List<String> toEnable = (List<String>) config.getKey("modules");
+		ArrayList<String> toEnable = (ArrayList<String>) config.getKey("modules");
+		ArrayList<String> browseCopy = new ArrayList<String>();
+		browseCopy.addAll(toEnable);
 		HashSet<CraftGuardModule> enabled = new HashSet<CraftGuardModule>();
 		
-		for(String element : toEnable){
+		for(String element : browseCopy){
 			if(!registry.containsModule(element)){
 				toEnable.remove(element);
 				craftGuardLogger.warning("Module " + element + " does not exist ! Ignoring it...");
@@ -107,7 +109,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 	}
 	
 	private void initLists(){
-		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "list.yml");
+		listFile = new File(this.getDataFolder().getAbsolutePath() + File.separator + "lists.yml");
 		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
 		listManager = new ListManager(this, listLoader);
 		listManager.init();
