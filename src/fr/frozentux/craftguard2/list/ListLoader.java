@@ -96,7 +96,7 @@ public class ListLoader {
 			Iterator<String> it = list.typeListsNames().iterator();
 			while(it.hasNext()){
 				String type = it.next();
-				Iterator<Id> idIterator = list.getTypeList(type).values().iterator();
+				Iterator<Id> idIterator = list.getTypeList(type, false).values().iterator();
 				ArrayList<String> rawList = new ArrayList<String>();
 				
 				while(idIterator.hasNext()) rawList.add(idIterator.next().toString());

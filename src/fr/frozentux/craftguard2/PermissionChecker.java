@@ -27,11 +27,11 @@ public class PermissionChecker {
 				
 				List list = manager.getList(it.next());
 				
-				if(player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + "." + list.getPermission()) && (list.containsId(id) || list.containsId(-id) || (list.typeListAvailable(type) && (list.getTypeList(type).containsKey(id) || list.getTypeList(type).containsKey(-id))))){
-					boolean listContains = (list.containsId(id)) ? list.getId(id).hasMetadata(data) : false;
-					boolean listContainsRem = (list.containsId(-id)) ? list.getId(-id).hasMetadata(data) : false;
-					boolean typeListContains = (list.typeListAvailable(type) && list.getTypeList(type).containsKey(id)) ? list.getTypeList(type).get(id).hasMetadata(data) : false;
-					boolean typeListContainsRem = (list.typeListAvailable(type) && list.getTypeList(type).containsKey(-id)) ? list.getTypeList(type).get(-id).hasMetadata(data) : false;
+				if(player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + "." + list.getPermission()) && (list.containsId(id) || list.containsId(-id) || (list.typeListAvailable(type) && (list.getTypeList(type, true).containsKey(id) || list.getTypeList(type, true).containsKey(-id))))){
+					boolean listContains = (list.containsId(id)) ? list.getId(id, true).hasMetadata(data) : false;
+					boolean listContainsRem = (list.containsId(-id)) ? list.getId(-id, true).hasMetadata(data) : false;
+					boolean typeListContains = (list.typeListAvailable(type) && list.getTypeList(type, true).containsKey(id)) ? list.getTypeList(type, true).get(id).hasMetadata(data) : false;
+					boolean typeListContainsRem = (list.typeListAvailable(type) && list.getTypeList(type, true).containsKey(-id)) ? list.getTypeList(type, true).get(-id).hasMetadata(data) : false;
 					allowed = (listContains || typeListContains) && !listContainsRem && !typeListContainsRem;
 				}
 			}

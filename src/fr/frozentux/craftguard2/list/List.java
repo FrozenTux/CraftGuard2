@@ -53,7 +53,7 @@ public class List {
 	 * @return	true if the {@link TypeList} exists
 	 */
 	public boolean typeListAvailable(String type){
-		return typesLists.containsKey(type);
+		return ((parent != null && parent.typeListAvailable(type))|| typesLists.containsKey(type));
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class List {
 	 * @return		<code>true</code> if the id is contained
 	 */
 	public boolean containsId(int id){
-		return ids.containsKey(id);
+		return ((parent != null && parent.containsId(id))|| ids.containsKey(id));
 	}
 	
 	/**
@@ -70,8 +70,18 @@ public class List {
 	 * @param type	The type
 	 * @return		The {@link TypeList} if it exists; otherwise <code>null</code>
 	 */
-	public HashMap<Integer, Id> getTypeList(String type){
-		return typesLists.get(type);
+	public HashMap<Integer, Id> getTypeList(String type, boolean containsParent){
+		if(parent == null || !parent.typeListAvailable(type) || !containsParent)return typesLists.get(type);
+		else if(!typesLists.containsKey(type))return parent.getTypeList(type, true);
+		HashMap<Integer, Id> merged = typesLists.get(type);
+		HashMap<Integer, Id> parentList = parent.getTypeList(type, true);
+		Iterator<Integer> it = parentList.keySet().iterator();
+		while(it.hasNext()){
+			Id id = parentList.get(it.next());
+			if(merged.containsKey(id.getId()))merged.put(id.getId(), merged.get(id.getId()).merge(id));
+			else merged.put(id.getId(), id);
+		}
+		return merged;
 	}
 	
 	/**
@@ -79,8 +89,10 @@ public class List {
 	 * @param id	The id of the {@link Id}
 	 * @return		The {@link Id} if exists; otherwise null
 	 */
-	public Id getId(int id){
-		return ids.get(id);
+	public Id getId(int id, boolean containsParent){
+		if(parent == null || !parent.containsId(id) || !containsParent)return ids.get(id);
+		else if(!ids.containsKey(id))return parent.getId(id, true);
+		return ids.get(id).merge(parent.getId(id, true));
 	}
 	
 	/**
@@ -91,9 +103,9 @@ public class List {
 		HashMap<Integer, Id> mergedMap = this.ids;
 		Iterator<Integer> parentIt = parent.getIds(true).keySet().iterator();
 		while(parentIt.hasNext()){
-			int id = parentIt.next();
-			if(!mergedMap.containsKey(id))mergedMap.put(id, parent.getId(id));
-			else mergedMap.put(id, mergedMap.get(id).merge(parent.getId(id)));
+			Id id = parent.getId(parentIt.next(), true);
+			if(!mergedMap.containsKey(id.getId()))mergedMap.put(id.getId(), id);
+			else mergedMap.put(id.getId(), mergedMap.get(id).merge(id));
 		}
 		
 		return mergedMap;
@@ -153,7 +165,7 @@ public class List {
 		HashSet<String> result = new HashSet<String>();
 		Iterator<Integer> it = this.getIds(false).keySet().iterator();
 		while(it.hasNext()){
-			result.add(this.getId(it.next()).toString());
+			result.add(this.getId(it.next(), false).toString());
 		}
 		return result;
 	}
