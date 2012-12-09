@@ -170,11 +170,24 @@ public class List {
 		return result;
 	}
 	
+	public String toString(){
+		String result = "";
+		Iterator<Integer> it = this.getIds(true).keySet().iterator();
+		while(it.hasNext()){
+			result = result + "\n" + ids.get(it.next()).toString();
+		}
+		return result;
+	}
+	
 	public boolean hasTypeLists(){
 		return !typesLists.isEmpty();
 	}
 	
 	public Set<String> typeListsNames(){
 		return typesLists.keySet();
+	}
+
+	public void removeId(int id) {
+		ids.remove(id);
 	}
 }
