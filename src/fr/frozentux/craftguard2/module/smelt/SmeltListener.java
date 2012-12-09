@@ -43,7 +43,7 @@ private CraftGuardPlugin plugin;
 			boolean allowed = !PermissionChecker.check(player, id, metadata, plugin, "smelt");
 			if(allowed){
 				e.setCancelled(allowed);
-				if(allowed)player.updateInventory();
+				player.updateInventory();
 			}
 			
 		}
