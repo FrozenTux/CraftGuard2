@@ -54,16 +54,20 @@ public class ListLoader {
 			e.printStackTrace();
 		}
 		
+		plugin.getCraftGuardLogger().debug("Start loading; Lists : " + configuration.getKeys(false).size());
 		Iterator<String> it = configuration.getKeys(false).iterator();
 		
 		int ignoredCount = 0;
 		
 		while(it.hasNext()){	//This loop will be run for each list
+			plugin.getCraftGuardLogger().debug("===LISTE===");
 			String name = it.next();
 			String permission = configuration.getString(name + ".permission");
 			String parentName = configuration.getString(name + ".parent");
-			java.util.List<String> ids = configuration.getStringList(name + "ids");
+			java.util.List<String> ids = configuration.getStringList(name + ".ids");
+			plugin.getCraftGuardLogger().debug(name + ";" + permission + ";" + parentName);
 			if(ids != null){
+				plugin.getCraftGuardLogger().debug(String.valueOf(ids.size()));
 				lists.put(name, new List(name, permission, parentName, ids, plugin.getListManager()));
 				//Type lists loading
 				Set<String> customLists = configuration.getConfigurationSection(name).getKeys(false);
