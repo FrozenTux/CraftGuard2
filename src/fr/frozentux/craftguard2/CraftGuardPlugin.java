@@ -74,7 +74,6 @@ public class CraftGuardPlugin extends JavaPlugin {
 	}
 	
 	public void onDisable(){
-		config.write();
 		craftGuardLogger.info("CraftGuard version " + this.getDescription().getVersion() + " has been disabled");
 	}
 	
