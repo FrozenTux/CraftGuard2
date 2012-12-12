@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.bukkit.Material;
+
 /**
  * Data structure reprensenting a craftGuard List, with it's attributes, it's type lists and other stuff 
  * @author FrozenTux
@@ -175,7 +177,8 @@ public class List {
 		String result = "";
 		Iterator<Integer> it = this.getIds(true).keySet().iterator();
 		while(it.hasNext()){
-			result = result + "\n* " + ids.get(it.next()).toString();
+			int id = it.next();
+			result = result + "\n* " + ids.get(id).toString() + " " + Material.getMaterial(Math.abs(id)).toString();
 		}
 		return result;
 	}
