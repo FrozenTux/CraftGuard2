@@ -76,7 +76,7 @@ public class ListManager {
 	public void generateCheckList(){
 		//First we will generate the default list
 		Iterator<String> listNames = getListsNames().iterator();
-		HashSet<Integer> defaultCheckList = new HashSet<Integer>();
+		checkList = new HashSet<Integer>();
 		
 		while(listNames.hasNext()){
 			Iterator<Integer> idIterator = getList(listNames.next()).getIds(false).keySet().iterator();
