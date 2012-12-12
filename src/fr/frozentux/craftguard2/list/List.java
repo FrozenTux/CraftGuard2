@@ -174,7 +174,7 @@ public class List {
 		String result = "";
 		Iterator<Integer> it = this.getIds(true).keySet().iterator();
 		while(it.hasNext()){
-			result = result + "\n" + ids.get(it.next()).toString();
+			result = result + "\n* " + ids.get(it.next()).toString();
 		}
 		return result;
 	}
