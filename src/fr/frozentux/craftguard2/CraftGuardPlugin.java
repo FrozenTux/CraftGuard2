@@ -14,8 +14,11 @@ import fr.frozentux.craftguard2.config.*;
 import fr.frozentux.craftguard2.list.*;
 import fr.frozentux.craftguard2.logger.*;
 import fr.frozentux.craftguard2.module.CraftGuardModule;
+import fr.frozentux.craftguard2.module.breaking.BreakListener;
 import fr.frozentux.craftguard2.module.craft.CraftListener;
+import fr.frozentux.craftguard2.module.place.PlaceListener;
 import fr.frozentux.craftguard2.module.smelt.SmeltListener;
+import fr.frozentux.craftguard2.module.use.UseListener;
 import fr.frozentux.craftguard2.smeltingmanager.*;
 
 /**
@@ -88,6 +91,9 @@ public class CraftGuardPlugin extends JavaPlugin {
 		//STEP 1 : Adding all the modules to the registry
 		registry.add(new CraftGuardModule("craft", new CraftListener(this), this));
 		registry.add(new CraftGuardModule("smelt", new SmeltListener(this), this));
+		registry.add(new CraftGuardModule("break", new BreakListener(this), this));
+		registry.add(new CraftGuardModule("place", new PlaceListener(this), this));
+		registry.add(new CraftGuardModule("use", new UseListener(this), this));
 		
 		//STEP 2 : Selecting the modules to enable, and enable them
 		@SuppressWarnings("unchecked")
