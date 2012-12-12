@@ -26,6 +26,7 @@ public class CgRemoveCommand extends CgCommandComponent {
 			id = Integer.valueOf(args[1]);
 		}catch(NumberFormatException e){
 			sender.sendMessage(ChatColor.RED + args[1] + " is not a number !");
+			return true;
 		}
 		
 		plugin.getListManager().getList(args[0]).removeId(id);
