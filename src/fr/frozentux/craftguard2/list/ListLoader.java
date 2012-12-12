@@ -94,7 +94,7 @@ public class ListLoader {
 		String path = list.getName() + ".";
 		if(!list.getPermission().equals(list.getName()))configuration.set(path + "permission", list.getPermission());
 		if(list.getParent() != null)configuration.set(path + "parent", list.getPermission());
-		configuration.set(path + "ids", list.idsToStringSet());
+		configuration.set(path + "ids", list.idsToStringList());
 		
 		if(list.hasTypeLists()){
 			Iterator<String> it = list.typeListsNames().iterator();

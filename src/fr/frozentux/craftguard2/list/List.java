@@ -1,5 +1,6 @@
 package fr.frozentux.craftguard2.list;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -161,8 +162,8 @@ public class List {
 		typesLists.put(type, map);
 	}
 	
-	public Set<String> idsToStringSet(){
-		HashSet<String> result = new HashSet<String>();
+	public java.util.List<String> idsToStringList(){
+		ArrayList<String> result = new ArrayList<String>();
 		Iterator<Integer> it = this.getIds(false).keySet().iterator();
 		while(it.hasNext()){
 			result.add(this.getId(it.next(), false).toString());
