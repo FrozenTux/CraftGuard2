@@ -39,15 +39,15 @@ public class PermissionChecker {
 		}else allowed = plugin.getConfiguration().getBooleanKey("preventiveallow");
 		
 		if(!allowed){
-			if(plugin.getConfiguration().getBooleanKey("notifyplayer"))player.sendMessage(ChatColor.RED + parseMessage(plugin.getConfiguration().getStringKey("denymessage"), player, id));
-			if(plugin.getConfiguration().getBooleanKey("log"))plugin.getCraftGuardLogger().info(parseMessage(plugin.getConfiguration().getStringKey("logmessage"), player, id));
+			if(plugin.getConfiguration().getBooleanKey("notifyplayer"))player.sendMessage(ChatColor.RED + parseMessage(plugin.getConfiguration().getStringKey("denymessage"), player, id, type));
+			if(plugin.getConfiguration().getBooleanKey("log"))plugin.getCraftGuardLogger().info(parseMessage(plugin.getConfiguration().getStringKey("logmessage"), player, id, type));
 		}
 		
 		return allowed;
 	}
 	
-	private static String parseMessage(String message, Player player, int id){
-		return message.replaceAll("%p", player.getName()).replaceAll("%i", String.valueOf(id)).replaceAll("%n", Material.getMaterial(id).toString()); 
+	private static String parseMessage(String message, Player player, int id, String type){
+		return message.replaceAll("%p", player.getName()).replaceAll("%i", String.valueOf(id)).replaceAll("%n", Material.getMaterial(id).toString()).replaceAll("%m", type); 
 	}
 	
 }
