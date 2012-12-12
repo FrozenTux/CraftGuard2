@@ -20,7 +20,7 @@ public class List {
 	
 	public List(String name, String permission, String parent, ListManager manager){
 		this.name = name;
-		this.permission = permission;
+		this.permission = (permission == null) ? name : permission;
 		this.parentName = parent;
 		this.manager = manager;
 		this.ids = new HashMap<Integer, Id>();
@@ -29,7 +29,7 @@ public class List {
 	
 	public List(String name, String permission, String parent, java.util.List<String> list, ListManager manager){
 		this.name = name;
-		this.permission = permission;
+		this.permission = (permission == null) ? name : permission;
 		this.parentName = parent;
 		this.manager = manager;
 		this.ids = new HashMap<Integer, Id>();
