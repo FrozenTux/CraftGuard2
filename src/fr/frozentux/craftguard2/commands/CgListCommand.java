@@ -1,5 +1,7 @@
 package fr.frozentux.craftguard2.commands;
 
+import java.util.Iterator;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -10,8 +12,17 @@ public class CgListCommand extends CgCommandComponent {
 	public static boolean execute(CommandSender sender, String command, String[] args, CraftGuardPlugin plugin) {
 		
 		if(args.length != 1){
-			sender.sendMessage(CgCommandComponent.MESSAGE_ARGUMENTS + "/cg list <list>");
-			return false;
+			if(args.length == 0){
+				sender.sendMessage(ChatColor.AQUA + "Lists :");
+				Iterator<String> it = plugin.getListManager().getListsNames().iterator();
+				while(it.hasNext()){
+					sender.sendMessage(ChatColor.AQUA + "- " + it.next());
+				}
+				return true;
+			}else{
+				sender.sendMessage(CgCommandComponent.MESSAGE_ARGUMENTS + "/cg list <list>");
+				return false;
+			}
 		}else if(!sender.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + ".admin.list") && !sender.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + ".admin.*")){
 			sender.sendMessage(CgCommandComponent.MESSAGE_PERMISSION);
 			return false;
