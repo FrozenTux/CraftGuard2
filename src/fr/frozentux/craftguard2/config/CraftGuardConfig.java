@@ -28,7 +28,7 @@ public class CraftGuardConfig {
 	
 	private HashMap<String, Object> fields;
 	
-	private static List<String> preModules = Arrays.asList("craft", "use");
+	private static List<String> preModules = Arrays.asList("craft", "smelt");
 	private static ArrayList<String> modules = new ArrayList<String>();
 	
 	private String[] defaultKeys = {"preventiveallow", "denymessage", "log", "logmessage", "baseperm", "debug", "notifyplayer", "modules"};
@@ -77,11 +77,7 @@ public class CraftGuardConfig {
 		if(!file.isSet("log")){
 			plugin.getCraftGuardLogger().info("Configuration file not detected ! Writing defaults...");
 			file.options().header("CraftGuard version 2.X by FrozenTux\nhttp://dev.bukkit.org/server-mods/craftguard").copyHeader();
-			try {
-				file.save(configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			write();
 		}
 		
 		Iterator<String> it = file.getKeys(false).iterator();
