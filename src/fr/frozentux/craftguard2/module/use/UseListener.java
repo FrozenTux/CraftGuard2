@@ -23,8 +23,8 @@ public class UseListener implements Listener {
 		if(!e.getAction().equals(Action.PHYSICAL)){
 			Player p = e.getPlayer();
 			ItemStack i = e.getItem();
-			
-			boolean denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
+			boolean denied = false;
+			if(i != null)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
 			if(denied){
 				e.setCancelled(denied);
 				p.updateInventory();
