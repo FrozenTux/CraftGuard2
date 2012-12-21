@@ -2,6 +2,7 @@ package fr.frozentux.craftguard2.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,7 +28,8 @@ public class CraftGuardConfig {
 	
 	private HashMap<String, Object> fields;
 	
-	private static List<String> modules = Arrays.asList("craft", "use");
+	private static List<String> preModules = Arrays.asList("craft", "use");
+	private static ArrayList<String> modules = new ArrayList<String>();
 	
 	private String[] defaultKeys = {"preventiveallow", "denymessage", "log", "logmessage", "baseperm", "debug", "notifyplayer", "modules"};
 	private Object[] defaultValues = {true, "You can't %m %n !", true, "%p tried to %m %n(%i) but has been denied", "craftguard", false, true, modules};
@@ -42,6 +44,7 @@ public class CraftGuardConfig {
 		fields = new HashMap<String, Object>();
 		configFile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 		file = new YamlConfiguration();
+		modules.addAll(preModules);
 	}
 	
 	/**
