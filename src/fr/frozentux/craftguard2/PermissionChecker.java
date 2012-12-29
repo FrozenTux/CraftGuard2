@@ -36,7 +36,7 @@ public class PermissionChecker {
 				}
 			}
 			
-		}else allowed = plugin.getConfiguration().getBooleanKey("preventiveallow");
+		}else allowed = plugin.getConfiguration().getBooleanKey("allowbydefault");
 		
 		if(!allowed){
 			if(plugin.getConfiguration().getBooleanKey("notifyplayer"))player.sendMessage(ChatColor.RED + parseMessage(plugin.getConfiguration().getStringKey("denymessage"), player, id, type));

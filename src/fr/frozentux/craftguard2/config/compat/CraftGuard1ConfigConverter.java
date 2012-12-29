@@ -81,6 +81,13 @@ public class CraftGuard1ConfigConverter {
 			fields.put("modules", Arrays.asList("craft"));
 		}
 		
+		if(fields.containsKey("preventiveallow") && Boolean.valueOf(String.valueOf(fields.get("preventiveallow")))){
+			fields.remove("preventiveallow");
+			fields.put("allowbydefault", true);
+		}else{
+			fields.put("allowbydefault", false);
+		}
+		
 		
 		configFile.delete();
 		
