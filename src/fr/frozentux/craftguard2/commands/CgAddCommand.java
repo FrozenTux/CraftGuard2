@@ -24,6 +24,7 @@ public class CgAddCommand extends CgCommandComponent {
 		
 		plugin.getListManager().getList(args[0]).addId(new Id(args[1]));
 		plugin.getListManager().saveList(plugin.getListManager().getList(args[0]));
+		plugin.getListManager().generateCheckList();
 		
 		sender.sendMessage(ChatColor.GREEN + "Successfully added " + Material.getMaterial(Math.abs(Integer.valueOf(args[1].split(":")[0]))).name() + " (" + args[1] + ") to list " + args[0]);
 		

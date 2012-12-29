@@ -21,6 +21,7 @@ public class CgRemoveListCommand extends CgCommandComponent {
 		
 		plugin.getListManager().removeList(args[0]);
 		plugin.getListManager().saveLists();
+		plugin.getListManager().generateCheckList();
 		
 		sender.sendMessage(ChatColor.GREEN + "List " + args[0] + " has been removed !");
 		
