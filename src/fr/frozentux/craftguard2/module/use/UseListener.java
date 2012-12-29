@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,7 +21,7 @@ public class UseListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onItemUse(PlayerInteractEvent e){
+	public void onPlayerInteract(PlayerInteractEvent e){
 		if(!e.getAction().equals(Action.PHYSICAL)){
 			Player p = e.getPlayer();
 			ItemStack i = e.getItem();
@@ -29,6 +31,34 @@ public class UseListener implements Listener {
 				e.setCancelled(denied);
 				p.updateInventory();
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerInteractWithEntity(PlayerInteractEntityEvent e){
+		Player p = e.getPlayer();
+		ItemStack i = p.getItemInHand();
+		boolean denied = false;
+		if(i != null)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
+		if(denied){
+			e.setCancelled(denied);
+			p.updateInventory();
+		}
+	}
+	
+	@EventHandler
+	public void onEntityDamaged(EntityDamageByEntityEvent e){
+		try{
+			Player p = (Player)e.getDamager();
+			ItemStack i = p.getItemInHand();
+			boolean denied = false;
+			if(i != null)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
+			if(denied){
+				e.setCancelled(denied);
+				p.updateInventory();
+			}
+		}catch(Exception ex){
+			return;
 		}
 	}
 	
