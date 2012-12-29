@@ -8,6 +8,7 @@ import java.util.HashSet;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
+import org.mcstats.Metrics.Graph;
 
 import fr.frozentux.craftguard2.commands.*;
 import fr.frozentux.craftguard2.config.*;
@@ -43,6 +44,8 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	private SmeltFile smeltFile;
 	
+	private HashSet<CraftGuardModule> enabled;
+	
 	public void onLoad(){
 		registry = new ModuleRegistry(this);
 	}
@@ -52,16 +55,9 @@ public class CraftGuardPlugin extends JavaPlugin {
 		//Logger init
 		craftGuardLogger = new CraftGuardLogger(this);
 		
-		//Metrics init
-		try {
-			metrics = new Metrics(this);
-			metrics.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		initConfig();
 		initModules();
+		initMetrics();
 		initLists();
 		
 		//Smelting init
@@ -101,7 +97,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 		ArrayList<String> toEnable = (ArrayList<String>) config.getKey("modules");
 		ArrayList<String> browseCopy = new ArrayList<String>();
 		browseCopy.addAll(toEnable);
-		HashSet<CraftGuardModule> enabled = new HashSet<CraftGuardModule>();
+		enabled = new HashSet<CraftGuardModule>();
 		
 		for(String element : browseCopy){
 			if(!registry.containsModule(element)){
@@ -120,6 +116,27 @@ public class CraftGuardPlugin extends JavaPlugin {
 		listLoader = new ListLoader(this, new YamlConfiguration(), listFile);
 		listManager = new ListManager(this, listLoader);
 		listManager.init();
+	}
+	
+	private void initMetrics(){
+		try {
+			metrics = new Metrics(this);
+			
+			Graph modules = metrics.createGraph("Modules enabled");
+			
+			for(CraftGuardModule module : enabled){
+				modules.addPlotter(new Metrics.Plotter(module.getType()) {
+					
+					public int getValue() {
+						return 1;
+					}
+				});
+			}
+			
+			metrics.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -148,6 +165,10 @@ public class CraftGuardPlugin extends JavaPlugin {
 	
 	public ModuleRegistry getModuleRegistry(){
 		return registry;
+	}
+	
+	public HashSet<CraftGuardModule> getEnabledModules(){
+		return enabled;
 	}
 	
 }
