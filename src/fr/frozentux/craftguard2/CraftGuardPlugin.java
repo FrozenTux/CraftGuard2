@@ -87,7 +87,7 @@ public class CraftGuardPlugin extends JavaPlugin {
 		if(config.getBooleanKey("debug") == true)craftGuardLogger.enableDebug();
 	}
 	
-	private void initModules(){
+	public void initModules(){
 		//STEP 1 : Adding all the modules to the registry
 		registry.add(new CraftGuardModule("craft", new CraftListener(this), this));
 		registry.add(new CraftGuardModule("smelt", new SmeltListener(this), this));

@@ -21,6 +21,8 @@ public class CgReloadCommand extends CgCommandComponent {
 		
 		plugin.getConfiguration().load();
 		
+		plugin.initModules();
+		
 		plugin.getListManager().init();
 		
 		SmeltReference.getReference().clearReference();
