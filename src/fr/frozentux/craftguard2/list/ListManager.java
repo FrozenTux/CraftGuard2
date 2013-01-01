@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
+import fr.frozentux.craftguard2.module.CraftGuardModule;
 
 public class ListManager {
 	
@@ -79,8 +80,19 @@ public class ListManager {
 		checkList = new HashSet<Integer>();
 		
 		while(listNames.hasNext()){
-			Iterator<Integer> idIterator = getList(listNames.next()).getIds(false).keySet().iterator();
+			List list = getList(listNames.next());
+			Iterator<Integer> idIterator = list.getIds(false).keySet().iterator();
 			while(idIterator.hasNext())addToCheckList(idIterator.next());
+			if(list.hasTypeLists()){
+				Iterator<CraftGuardModule> enabledIterator = plugin.getEnabledModules().iterator();
+				while(enabledIterator.hasNext()){
+					String module = enabledIterator.next().getType();
+					if(list.typeListAvailable(module)){
+						Iterator<Integer> typeListIterator = list.getTypeList(module, false).keySet().iterator();
+						while(typeListIterator.hasNext())addToCheckList(typeListIterator.next());
+					}
+				}
+			}
 		}
 	}
 	
