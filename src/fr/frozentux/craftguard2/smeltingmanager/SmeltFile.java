@@ -3,7 +3,10 @@ package fr.frozentux.craftguard2.smeltingmanager;
 import java.io.File;
 import java.util.Iterator;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
 
 import fr.frozentux.craftguard2.CraftGuardPlugin;
 
@@ -39,11 +42,12 @@ public class SmeltFile {
 			String key = it.next();
 			if(isInt(key) || isInt(String.valueOf(file.get(key)))){
 				SmeltReference.getReference().addSmelting(Integer.valueOf(key), file.getInt(key));
+				plugin.getServer().addRecipe(new FurnaceRecipe(new ItemStack(Integer.valueOf(key)), Material.getMaterial(file.getInt(key))));
 				customCount++;
 			}
 		}
 		
-		if(customCount != 0)plugin.getCraftGuardLogger().info("Smelting Manager : Loaded " + baseCount + customCount + " smeltings (" + customCount + " custom)");
+		if(customCount != 0)plugin.getCraftGuardLogger().info("Smelting Manager : Applied " + customCount + " smeltings");
 		
 	}
 	
