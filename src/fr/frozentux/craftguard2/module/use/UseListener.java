@@ -1,5 +1,6 @@
 package fr.frozentux.craftguard2.module.use;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +27,7 @@ public class UseListener implements Listener {
 			Player p = e.getPlayer();
 			ItemStack i = e.getItem();
 			boolean denied = false;
-			if(i != null)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
+			if(i != null && i.getType() != Material.AIR)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
 			if(denied){
 				e.setCancelled(denied);
 				p.updateInventory();
@@ -39,7 +40,7 @@ public class UseListener implements Listener {
 		Player p = e.getPlayer();
 		ItemStack i = p.getItemInHand();
 		boolean denied = false;
-		if(i != null)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
+		if(i != null && i.getType() != Material.AIR)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
 		if(denied){
 			e.setCancelled(denied);
 			p.updateInventory();
@@ -52,7 +53,7 @@ public class UseListener implements Listener {
 			Player p = (Player)e.getDamager();
 			ItemStack i = p.getItemInHand();
 			boolean denied = false;
-			if(i != null)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
+			if(i != null && i.getType() != Material.AIR)denied = !PermissionChecker.check(p, i.getTypeId(), i.getData().getData(), plugin, "use");
 			if(denied){
 				e.setCancelled(denied);
 				p.updateInventory();

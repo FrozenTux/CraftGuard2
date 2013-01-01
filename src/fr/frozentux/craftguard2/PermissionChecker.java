@@ -17,6 +17,7 @@ import fr.frozentux.craftguard2.list.ListManager;
 public class PermissionChecker {
 	
 	public static boolean check(Player player, int id, byte data, CraftGuardPlugin plugin, String type){
+		if(id == 0)return true;
 		ListManager manager = plugin.getListManager();
 		
 		boolean allowed = false;
