@@ -139,14 +139,6 @@ public class CraftGuardPlugin extends JavaPlugin {
 		}
 	}
 	
-	
-	/*
-	 * Getters
-	 */
-	public CraftGuardPlugin getCraftGuard(){
-		return this;
-	}
-	
 	public CraftGuardLogger getCraftGuardLogger(){
 		return craftGuardLogger;
 	}
