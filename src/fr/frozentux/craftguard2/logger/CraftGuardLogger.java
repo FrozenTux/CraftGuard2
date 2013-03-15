@@ -18,7 +18,7 @@ public class CraftGuardLogger {
 	
 	private Plugin plugin;
 	private boolean debug = false, playerDebug = false;
-	private String debugPlayerName = "FrozenTux";
+	private String debugPlayerName = "FrozenTux", lastMessage="";
 	
 	/**
 	 * A little extension to logger, capable to send debug messages to a player
@@ -45,6 +45,8 @@ public class CraftGuardLogger {
 	 * @param message	Message to log
 	 */
 	public void info(String message){
+        if(isLastMessage(message)return;
+        lastMessage = message;
 		logger.log(Level.INFO, message);
 		if(playerDebug){
 			debugToPlayer(message, "INFO");
@@ -56,6 +58,8 @@ public class CraftGuardLogger {
 	 * @param message	Message to log
 	 */
 	public void severe(String message){
+        if(isLastMessage(message)return;
+        lastMessage = message;
 		logger.log(Level.SEVERE, message);
 		if(playerDebug){
 			debugToPlayer(message, "SEVERE");
@@ -67,6 +71,8 @@ public class CraftGuardLogger {
 	 * @param message	Message to log
 	 */
 	public void debug(String message){
+        if(isLastMessage(message)return;
+        lastMessage = message;
 		if(debug)logger.log(Level.INFO, "(Debug) " + message);
 		if(playerDebug){
 			debugToPlayer(message, "DEBUG");
@@ -74,6 +80,8 @@ public class CraftGuardLogger {
 	}
 	
 	public void warning(String message){
+        if(isLastMessage(message)return;
+        lastMessage = message;
 		logger.log(Level.WARNING, message);
 		if(playerDebug){
 			debugToPlayer(message, "WARNING");
@@ -86,5 +94,9 @@ public class CraftGuardLogger {
 			p.sendMessage(ChatColor.AQUA + "*" + level + "(" + plugin.getName() +  ") > " + ChatColor.ITALIC + message); 
 		}
 	}
+    
+    public boolean isLastMessage(String message){
+        return lastMessage.equals(message);
+    }
 	
 }
