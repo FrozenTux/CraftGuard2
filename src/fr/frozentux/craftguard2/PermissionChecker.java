@@ -18,6 +18,8 @@ public class PermissionChecker {
 	
 	public static boolean check(Player player, int id, byte data, CraftGuardPlugin plugin, String type){
 		if(id == 0)return true;
+
+        if(plugin.getConfiguration().getBooleanKey("adminoverride") && (player.isOp() || player.hasPermission(plugin.getConfiguration().getStringKey("baseperm") + ".admin.override")))return true;
 		ListManager manager = plugin.getListManager();
 		
 		boolean allowed = false;
